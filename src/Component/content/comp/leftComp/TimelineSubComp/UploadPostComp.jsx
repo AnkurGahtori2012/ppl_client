@@ -17,13 +17,12 @@ const UploadPostComp = props => {
       .then(() => {
         // alert("sadasd")
         props.handleUpload(true);
-        // props.history.push("/timeline");
+        props.history.push("/timeline");
       })
       .catch(errr => {
         alert("error");
       });
   };
-  console.log("upload posts props : ", props);
   return (
     <>
       <div className="login_sec">

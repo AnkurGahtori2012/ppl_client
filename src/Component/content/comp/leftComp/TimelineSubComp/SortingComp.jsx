@@ -1,6 +1,7 @@
 import React from "react";
 
 function SortingComp(props) {
+  console.log("inside sorting props are: ",props.changeSortingCriteria);
   return (
     <div>
       <div className="post_div">

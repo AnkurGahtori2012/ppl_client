@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import LoadingScreen from "../../../../../LoadingScreen";
 const SinglePost = props => {
+  let loadingPostDone = useState(false);
   const [postToDisplay, setPostToDisplay] = useState({ like: [], dislike: [] });
   const [comments, setComments] = useState([
     { userID: "", comment: "", username: "", profilePic: "" }
@@ -14,7 +16,7 @@ const SinglePost = props => {
     let data = localStorage.getItem("details");
     data = JSON.parse(data);
     formdata.append("userID", data._id);
-    formdata.append("postID", props.location.state.value._id);
+    formdata.append("postID", props.location.pathname.split("timeline/")[1]);
     formdata.append("username", data.username);
     formdata.append("profilePic", data.ProfilePic || "");
     Axios.post("http://192.168.100.189:8082/comment/addComment", formdata).then(
@@ -26,10 +28,25 @@ const SinglePost = props => {
       }
     );
   };
+  let getPostByID = async id => {
+    let result = await Axios.post(
+      "http://192.168.100.189:8082/post/getPostByID",
+      id
+    );
+    return result;
+  };
   useEffect(() => {
-    setPostToDisplay(props.location.state.value);
+    let id = { _id: props.location.pathname.split("timeline/")[1] };
+    getPostByID(id).then(result => {
+      if (result.data) {
+        setPostToDisplay(result.data);
+      } else {
+        props.history.push("/error");
+      }
+    });
+
     Axios.post("http://192.168.100.189:8082/comment/getComment", {
-      postID: props.location.state.value._id
+      postID: props.location.pathname.split("timeline/")[1]
     }).then(result => {
       setComments(result.data);
     });
@@ -38,7 +55,7 @@ const SinglePost = props => {
   let value = postToDisplay;
   return (
     <>
-      <div>
+      {loadingPostDone?<div>
         <div className="contnt_2">
           <div className="div_a">
             <div className="div_title">{value.title}</div>
@@ -90,10 +107,13 @@ const SinglePost = props => {
                     onClick={() => {
                       // console.log("clicking like inside Axios");
                       let data = JSON.parse(localStorage.getItem("details"));
-                      Axios.post("http://192.168.100.189:8082/post/updateLike", {
-                        postID: value._id,
-                        userID: data._id
-                      }).then(result => {
+                      Axios.post(
+                        "http://192.168.100.189:8082/post/updateLike",
+                        {
+                          postID: value._id,
+                          userID: data._id
+                        }
+                      ).then(result => {
                         if (result.data) {
                           if (
                             result.data.like.length != postToDisplay.like.length
@@ -189,7 +209,7 @@ const SinglePost = props => {
               <a href="#">View more</a>
             </div> */}
         </div>
-      </div>
+      </div>:<LoadingScreen/>}
     </>
   );
 };

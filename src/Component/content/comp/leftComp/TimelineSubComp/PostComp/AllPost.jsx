@@ -18,7 +18,7 @@ const mapStateToProps = state => {
 const AllPost = props => {
   const [posts, setPosts] = useState([]);
   const [postsToDisplay, setPostsToDisplay] = useState([]);
-  const { sortingCriteria, uploadFlag, categoriesToDisplay } = props;
+  const { sortingCriteria, categoriesToDisplay } = props;
   const preSortingCriteria = usePrevious(sortingCriteria);
   const preCategoriesToDisplay = usePrevious(categoriesToDisplay);
   useEffect(() => {
@@ -27,7 +27,7 @@ const AllPost = props => {
       updatePosts();
       props.handleUpload(false);
     }
-  }, [sortingCriteria,props.uploadFlag]);
+  }, [sortingCriteria, props.uploadFlag]);
 
   useEffect(() => {
     //console.log("this is update for category chaneg");
@@ -49,12 +49,6 @@ const AllPost = props => {
       setPostsToDisplay(newPosts);
     }
   }, [categoriesToDisplay]);
-
-  // componentDidUpdate(prevProps) {
-  //   if (props.categoriesToDisplay !== prevProps.categoriesToDisplay) {
-  //     state.Referesh = false;
-
-  //  }
 
   const sortByLike = arr => {
     arr.sort(function(a, b) {

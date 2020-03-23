@@ -30,7 +30,7 @@ const HeaderRight = props => {
 };
 
 function Status(props) {
-  console.log("current logged in status", props);
+  // console.log("current logged in status", props);
   if (props.props.loggedIn) {
     return (
       <div

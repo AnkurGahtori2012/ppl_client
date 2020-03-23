@@ -21,7 +21,7 @@ let SubPostComp = props => {
             </div>
             <div className="div_top">
               <div className="div_top_lft">
-                <img src="/images/img_6.png" alt=""/>
+                <img src="/images/img_6.png" alt="" />
                 {value.username}
               </div>
               <div className="div_top_rgt">
@@ -33,14 +33,7 @@ let SubPostComp = props => {
               className="div_image"
               style={{ display: "flex", justifyContent: "center" }}
             >
-              <Link
-                to={{
-                  pathname: "/timeline/" + value._id,
-                  state: {
-                    value: postToDisplay
-                  }
-                }}
-              >
+              <Link to={"/timeline/" + value._id}>
                 <img
                   src={"http://192.168.100.189:8082/post/" + props.value.image}
                   alt="pet"
@@ -102,7 +95,7 @@ let SubPostComp = props => {
                               ...value,
                               like: result.data.like
                             });
-                            console.log("New data is",postToDisplay);
+                            console.log("New data is", postToDisplay);
                           }
                         }
                       });

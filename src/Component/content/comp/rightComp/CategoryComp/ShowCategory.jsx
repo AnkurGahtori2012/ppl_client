@@ -19,15 +19,6 @@ const mapDispatchToProps = dispatch => {
   };
 };
 const ShowCategory = props => {
-  //   this.state = {
-  //     categories: []
-  //   };
-  // }
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.categories !== prevProps.categories) {
-  //     this.setState({ categories: this.props.categories });
-  //   }
-  // }
   const handleChange = e => {
     let category = e.target.parentNode.parentNode.outerHTML
       .split("</span></div>")[0]
@@ -62,7 +53,7 @@ const ShowCategory = props => {
                       alt="Img"
                       src={"http://192.168.100.189:8082/post/" + value.image}
                       alt="up"
-                      style={{ maxHeight: "40px",maxWidth:"40px" }}
+                      style={{ maxHeight: "40px", maxWidth: "40px" }}
                     />
                   </span>
                   <span>{value.category}</span>

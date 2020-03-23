@@ -39,25 +39,18 @@ const Content = props => {
 
   return (
     <>
-      <div className="container">
-        <div className="content">
-          <div className="content_rgt">
-            <Switch>
-              <Route exact path="/" component={LoginComp} />
-              <Route path="/login" component={LoginComp} />
-              <Route path="/signup" component={RegisterComp} />
-              <Route path="/forget" component={ForgetComp} />
-              <Route path="/timeline" component={LoggedinComp} />
-            </Switch>
-          </div>
-          <div className="content_lft">
-            <Switch>
-              <Route path="/timeline" component={TimelineComp}></Route>
-              <Route path="/" component={WelcomePage}></Route>
-            </Switch>
-          </div>
-        </div>
-      </div>
+      <Switch>
+        <Route exact path="/" component={LoginComp} />
+        <Route path="/login" component={LoginComp} />
+        <Route path="/signup" component={RegisterComp} />
+        <Route path="/forget" component={ForgetComp} />
+        <Route path="/timeline" component={LoggedinComp} />
+      </Switch>
+
+      <Switch>
+        <Route path="/timeline" component={TimelineComp}></Route>
+        <Route path="/" component={WelcomePage}></Route>
+      </Switch>
     </>
   );
 };
