@@ -17,6 +17,7 @@ const LoginComp = props => {
   const [rememberMe, setRememberMe] = useState("off");
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [verifyErrorDisplay, setVerifyErrorDisplay] = useState("none");
   useEffect(() => {
     let loginData = JSON.parse(localStorage.getItem("loginDetail"));
     if (loginData) {
@@ -33,7 +34,7 @@ const LoginComp = props => {
       setRememberMe(rememberMe === "on" ? "off" : "on");
     } else {
       setBackground("");
-      setEmailStatus("Email-ID");
+      setEmailStatus("");
     }
   };
   const handleSubmit = e => {
@@ -43,20 +44,24 @@ const LoginComp = props => {
       headers: { "content-type": "application/JSON" }
     }).then(result => {
       if (result.data) {
-        props.LOGIN();
-        // alert("user Found");
-        let email = result.data.email;
-        let password = result.data.password;
+        if (result.data.verify) {
+          props.LOGIN();
+          // alert("user Found");
+          let email = result.data.email;
+          let password = result.data.password;
 
-        if (rememberMe === "on") {
-          localStorage.setItem(
-            "loginDetail",
-            JSON.stringify([email, password])
-          );
+          if (rememberMe === "on") {
+            localStorage.setItem(
+              "loginDetail",
+              JSON.stringify([email, password])
+            );
+          }
+          result.data["password"] = "sorry for you";
+          localStorage.setItem("details", JSON.stringify(result.data));
+          props.history.push("/timeline", result.data);
+        } else {
+          setVerifyErrorDisplay("block");
         }
-        result.data["password"] = "sorry for you";
-        localStorage.setItem("details", JSON.stringify(result.data));
-        props.history.push("/timeline", result.data);
       } else {
         setBackground("#ffcccb");
         setEmailStatus("Email-ID or Password Incorrect");
@@ -77,18 +82,22 @@ const LoginComp = props => {
             <h1>Log In</h1>
             <form onSubmit={handleSubmit}>
               <ul>
-                <li style={{ background: background }}>
-                  <span>{emailStatus}</span>
-                  <input
-                    type="email"
-                    required="required"
-                    name="email"
-                    placeholder="Enter your email"
-                    defaultValue={username}
-                    onChange={handleChange}
-                  />
+                <li>
+                  <span>Email-ID</span>
+                  <span style={{ background: background }}>
+                    <input
+                      type="email"
+                      required="required"
+                      name="email"
+                      placeholder="Enter your email"
+                      defaultValue={username}
+                      onChange={handleChange}
+                    />
+                    {emailStatus}
+                  </span>
                 </li>
-                <li style={{ background: background }}>
+
+                <li>
                   <span>Password</span>
                   <input
                     required="required"
@@ -113,6 +122,13 @@ const LoginComp = props => {
                 </li>
               </ul>
             </form>
+            <h1
+              style={{
+                display: verifyErrorDisplay
+              }}
+            >
+              This Account is Not Yet Verified.
+            </h1>
             <div className="addtnal_acnt">
               I do not have any account yet.
               <Link to="/signup">Create My Account Now !</Link>

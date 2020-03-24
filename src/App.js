@@ -5,7 +5,7 @@ import Footer from "./Component/footer/Footer";
 import { Switch, Route, useLocation, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import TimelineScreen from "./Component/content/TimelineScreen";
-
+import VerifyComp from "./Component/content/comp/rightComp/VerifyComp";
 import LoginComp from "./Component/content/comp/rightComp/LoginComp";
 import RegisterComp from "./Component/content/comp/rightComp/RegisterComp";
 import ForgetComp from "./Component/content/comp/rightComp/ForgetComp";
@@ -52,6 +52,7 @@ const App = props => {
             <>
               <Switch>
                 <Redirect from="/timeline" to="/" />
+                <Route path="/verify/*" component={VerifyComp} />
                 <Route path="/reset/*" component={ResetComp} />
                 <Route exact path="/" component={LoginComp} />
                 <Route path="/signup" component={RegisterComp} />

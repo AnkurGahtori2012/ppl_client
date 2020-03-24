@@ -8,6 +8,7 @@ const RegisterComp = props => {
   const [background, setbackground] = useState("");
   const [backgroundCheckBox, setbackgroundCheckBox] = useState("");
   const [emailStatus, setEmailStatus] = useState("email");
+  const [registrationDone, setRegistrationDone] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem("details")) {
@@ -41,91 +42,101 @@ const RegisterComp = props => {
         headers: { "content-type": "application/JSON" }
       }).then(data => {
         if (data.data) {
-          props.history.push("/");
+          setRegistrationDone(true);
+          setTimeout(() => {
+            props.history.push("/");
+          }, 3000);
         } else {
           setbackground("#ffcccb");
           setEmailStatus("Email already Exist");
         }
       });
-      console.log("Form Submittting");
+      // console.log("Form Submittting");
     }
   };
   return (
     <div className="container">
       <div className="content">
         <WelcomePage />
-        <div className="content_rgt">
-          <div className="register_sec">
-            <h1>Create An Account</h1>
-            <form onSubmit={handleSubmit}>
-              <ul>
-                <li>
-                  <span>Username</span>
-                  <input
-                    required="required"
-                    type="text"
-                    name="username"
-                    placeholder="Enter your username"
-                  />
-                </li>
-                <li>
-                  <span>Password</span>
-                  <input
-                    required="required"
-                    type="password"
-                    minLength="8"
-                    name="password"
-                    placeholder="Enter your password"
-                  ></input>
-                </li>
-                <li style={{ background: background }}>
-                  <span>{emailStatus}</span>
-                  <input
-                    onChange={handleEmailChange}
-                    type="email"
-                    name="email"
-                    required="required"
-                    placeholder="Enter your email"
-                  />
-                </li>
-                <li>
-                  <span>First Name</span>
-                  <input
-                    required="required"
-                    type="text"
-                    name="fname"
-                    placeholder="Enter your first name"
-                  />
-                </li>
-                <li>
-                  <span>Last Name</span>
-                  <input
-                    required="required"
-                    type="text"
-                    name="lname"
-                    placeholder="Enter your last name"
-                  />
-                </li>
+        {!registrationDone ? (
+          <div className="content_rgt">
+            <div className="register_sec">
+              <h1>Create An Account</h1>
+              <form onSubmit={handleSubmit}>
+                <ul>
+                  <li>
+                    <span>Username</span>
+                    <input
+                      required="required"
+                      type="text"
+                      name="username"
+                      placeholder="Enter your username"
+                    />
+                  </li>
+                  <li>
+                    <span>Password</span>
+                    <input
+                      required="required"
+                      type="password"
+                      minLength="8"
+                      name="password"
+                      placeholder="Enter your password"
+                    ></input>
+                  </li>
+                  <li style={{ background: background }}>
+                    <span>{emailStatus}</span>
+                    <input
+                      onChange={handleEmailChange}
+                      type="email"
+                      name="email"
+                      required="required"
+                      placeholder="Enter your email"
+                    />
+                  </li>
+                  <li>
+                    <span>First Name</span>
+                    <input
+                      required="required"
+                      type="text"
+                      name="fname"
+                      placeholder="Enter your first name"
+                    />
+                  </li>
+                  <li>
+                    <span>Last Name</span>
+                    <input
+                      required="required"
+                      type="text"
+                      name="lname"
+                      placeholder="Enter your last name"
+                    />
+                  </li>
 
-                <li style={{ background: backgroundCheckBox }}>
-                  <input
-                    type="checkbox"
-                    name="select"
-                    onChange={handleCheckbox}
-                  />
-                  I agree to Term &amp; Conditions
-                </li>
-                <li>
-                  <input type="submit" />
-                </li>
-              </ul>
-            </form>
-            <div className="addtnal_acnt">
-              I already have an account.
-              <Link to="/">Login My Account !</Link>
+                  <li style={{ background: backgroundCheckBox }}>
+                    <input
+                      type="checkbox"
+                      name="select"
+                      onChange={handleCheckbox}
+                    />
+                    I agree to Term &amp; Conditions
+                  </li>
+                  <li>
+                    <input type="submit" />
+                  </li>
+                </ul>
+              </form>
+              <div className="addtnal_acnt">
+                I already have an account.
+                <Link to="/">Login My Account !</Link>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div>
+            <h1>Email sent for verification....</h1>
+            <h2>Redirecting to login page>>>></h2>
+          </div>
+        )}
       </div>
     </div>
   );
