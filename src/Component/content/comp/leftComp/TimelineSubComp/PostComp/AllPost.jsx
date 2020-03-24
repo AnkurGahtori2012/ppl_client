@@ -57,12 +57,12 @@ const AllPost = props => {
   };
 
   const updatePosts = () => {
-    Axios.get("http://192.168.100.189:8082/post/getPost").then(async result => {
+    Axios.get("http://localhost:8082/post/getPost").then(async result => {
       let newPosts = result.data;
       for (let i in newPosts) {
         let data = { postID: newPosts[i]["_id"] };
         await Axios.post(
-          "http://192.168.100.189:8082/comment/getCommentByID",
+          "http://localhost:8082/comment/getCommentByID",
           data
         ).then(result => {
           let count = 0;

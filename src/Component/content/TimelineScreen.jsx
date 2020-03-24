@@ -9,7 +9,7 @@ const TimelineScreen = props => {
     getCategories();
   }, []);
   const getCategories = () => {
-    Axios.get("http://192.168.100.189:8082/category/getCategories").then(
+    Axios.get("http://localhost:8082/category/getCategories").then(
       result => {
         if (result.data) {
           props.GET_CATEGORY({ categories: result.data });

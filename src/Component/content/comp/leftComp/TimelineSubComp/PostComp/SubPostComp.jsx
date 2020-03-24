@@ -35,7 +35,7 @@ let SubPostComp = props => {
             >
               <Link to={"/timeline/" + value._id}>
                 <img
-                  src={"http://192.168.100.189:8082/post/" + props.value.image}
+                  src={"http://localhost:8082/post/" + props.value.image}
                   alt="pet"
                   style={{ height: "200px", width: "200px" }}
                 />
@@ -81,7 +81,7 @@ let SubPostComp = props => {
                       let data = JSON.parse(localStorage.getItem("details"));
 
                       Axios.post(
-                        "http://192.168.100.189:8082/post/updateLike",
+                        "http://localhost:8082/post/updateLike",
                         {
                           postID: value._id,
                           userID: data._id
@@ -115,7 +115,7 @@ let SubPostComp = props => {
                       onClick={() => {
                         let data = JSON.parse(localStorage.getItem("details"));
                         console.log("clicking unlike inside Axios");
-                        Axios.post("http://192.168.100.189:8082/post/updateDislike", {
+                        Axios.post("http://localhost:8082/post/updateDislike", {
                           postID: value._id,
                           userID: data.userID
                         }).then(result => {

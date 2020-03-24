@@ -51,7 +51,7 @@ const ShowCategory = props => {
                   <span className="list_icon">
                     <img
                       alt="Img"
-                      src={"http://192.168.100.189:8082/post/" + value.image}
+                      src={"http://localhost:8082/post/" + value.image}
                       alt="up"
                       style={{ maxHeight: "40px", maxWidth: "40px" }}
                     />

@@ -39,7 +39,7 @@ const LoginComp = props => {
   const handleSubmit = e => {
     e.preventDefault();
     let formData = new FormData(e.target);
-    Axios.post("http://192.168.100.189:8082/user/loginUser", formData, {
+    Axios.post("http://localhost:8082/user/loginUser", formData, {
       headers: { "content-type": "application/JSON" }
     }).then(result => {
       if (result.data) {

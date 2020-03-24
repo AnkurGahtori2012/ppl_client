@@ -33,7 +33,7 @@ function AddCategoryComp(props) {
     let formData = new FormData(e.target);
     formData.append("userID", data["_id"]);
     Axios.post(
-      "http://192.168.100.189:8082/category/addCategory",
+      "http://localhost:8082/category/addCategory",
       formData
     ).then(result => {
       if (result.data) {

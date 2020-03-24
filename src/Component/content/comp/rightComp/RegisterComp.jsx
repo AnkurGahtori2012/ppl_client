@@ -37,11 +37,11 @@ const RegisterComp = props => {
       return;
     } else {
       let formData = new FormData(e.target);
-      Axios.post("http://192.168.100.189:8082/user/insertUser", formData, {
+      Axios.post("http://localhost:8082/user/insertUser", formData, {
         headers: { "content-type": "application/JSON" }
       }).then(data => {
         if (data.data) {
-          props.history.push("/login");
+          props.history.push("/");
         } else {
           setbackground("#ffcccb");
           setEmailStatus("Email already Exist");
@@ -122,7 +122,7 @@ const RegisterComp = props => {
             </form>
             <div className="addtnal_acnt">
               I already have an account.
-              <Link to="/login">Login My Account !</Link>
+              <Link to="/">Login My Account !</Link>
             </div>
           </div>
         </div>

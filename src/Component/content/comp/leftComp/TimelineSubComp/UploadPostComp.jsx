@@ -13,7 +13,7 @@ const UploadPostComp = props => {
     let formdata = new FormData(e.target);
     formdata.append("username", data["username"]);
     formdata.append("userID", data["_id"]);
-    Axios.post("http://192.168.100.189:8082/post/create", formdata)
+    Axios.post("http://localhost:8082/post/create", formdata)
       .then(() => {
         // alert("sadasd")
         props.handleUpload(true);

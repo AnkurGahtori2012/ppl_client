@@ -11,6 +11,7 @@ import RegisterComp from "./Component/content/comp/rightComp/RegisterComp";
 import ForgetComp from "./Component/content/comp/rightComp/ForgetComp";
 import NotFound from "./Component/NotFound";
 import LoadingScreen from "./Component/LoadingScreen";
+import ResetComp from "./Component/content/comp/rightComp/ResetComp";
 let LOGIN = () => {
   return { type: "LOGIN" };
 };
@@ -51,6 +52,7 @@ const App = props => {
             <>
               <Switch>
                 <Redirect from="/timeline" to="/" />
+                <Route path="/reset/*" component={ResetComp} />
                 <Route exact path="/" component={LoginComp} />
                 <Route path="/signup" component={RegisterComp} />
                 <Route path="/forget" component={ForgetComp} />

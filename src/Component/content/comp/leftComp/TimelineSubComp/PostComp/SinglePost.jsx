@@ -19,7 +19,7 @@ const SinglePost = props => {
     formdata.append("postID", props.location.pathname.split("timeline/")[1]);
     formdata.append("username", data.username);
     formdata.append("profilePic", data.ProfilePic || "");
-    Axios.post("http://192.168.100.189:8082/comment/addComment", formdata).then(
+    Axios.post("http://localhost:8082/comment/addComment", formdata).then(
       result => {
         let newcomments = [...comments];
         newcomments.push(result.data);
@@ -30,7 +30,7 @@ const SinglePost = props => {
   };
   let getPostByID = async id => {
     let result = await Axios.post(
-      "http://192.168.100.189:8082/post/getPostByID",
+      "http://localhost:8082/post/getPostByID",
       id
     );
     return result;
@@ -45,7 +45,7 @@ const SinglePost = props => {
       }
     });
 
-    Axios.post("http://192.168.100.189:8082/comment/getComment", {
+    Axios.post("http://localhost:8082/comment/getComment", {
       postID: props.location.pathname.split("timeline/")[1]
     }).then(result => {
       setComments(result.data);
@@ -74,7 +74,7 @@ const SinglePost = props => {
             </div>
             <div className="div_image">
               <img
-                src={"http://192.168.100.189:8082/post/" + value.image}
+                src={"http://localhost:8082/post/" + value.image}
                 alt="pet"
               />
             </div>
@@ -108,7 +108,7 @@ const SinglePost = props => {
                       // console.log("clicking like inside Axios");
                       let data = JSON.parse(localStorage.getItem("details"));
                       Axios.post(
-                        "http://192.168.100.189:8082/post/updateLike",
+                        "http://localhost:8082/post/updateLike",
                         {
                           postID: value._id,
                           userID: data._id
@@ -138,7 +138,7 @@ const SinglePost = props => {
                       onClick={() => {
                         console.log("clicking unlike inside Axios");
                         let data = JSON.parse(localStorage.getItem("details"));
-                        Axios.post("http://192.168.100.189:8082/post/updateDislike", {
+                        Axios.post("http://localhost:8082/post/updateDislike", {
                           postID: value._id,
                           userID: data.userID
                         }).then(result => {
