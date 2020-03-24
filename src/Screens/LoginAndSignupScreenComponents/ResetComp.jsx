@@ -1,5 +1,5 @@
 import React from "react";
-import WelcomePage from "../leftComp/WelcomePage";
+import WelcomePage from "./WelcomePage";
 import Axios from "axios";
 const ResetComp = props => {
   let handleSubmit = e => {

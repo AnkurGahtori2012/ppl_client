@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Route } from "react-router-dom";
-import AddCategoryComp from "./CategoryComp/AddCategoryComp";
-import ShowCategory from "./CategoryComp/ShowCategory";
+import AddCategoryComp from "./AddCategoryComp";
+import ShowCategory from "./ShowCategory";
 function SideNavBar(props) {
   return (
     <>

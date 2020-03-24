@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { Link, useLocation, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import WelcomePage from "../leftComp/WelcomePage";
+import WelcomePage from "./WelcomePage";
 const mapStateToProps = state => {
   return { loggedIn: state.loginReducer.loggedIn };
 };

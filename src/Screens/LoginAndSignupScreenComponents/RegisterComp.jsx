@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
-import WelcomePage from "../leftComp/WelcomePage";
+import WelcomePage from "./WelcomePage";
 
 const RegisterComp = props => {
   const [agree, setAgree] = useState("off");

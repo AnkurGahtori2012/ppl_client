@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import LoadingScreen from "../../../../../LoadingScreen";
+import LoadingScreen from "../../../LoadingScreen";
 const SinglePost = props => {
   let loadingPostDone = useState(false);
   const [postToDisplay, setPostToDisplay] = useState({ like: [], dislike: [] });

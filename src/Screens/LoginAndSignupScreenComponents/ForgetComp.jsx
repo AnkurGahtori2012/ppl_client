@@ -1,5 +1,5 @@
 import React from "react";
-import WelcomePage from "../leftComp/WelcomePage";
+import WelcomePage from "./WelcomePage";
 import Axios from "axios";
 export default class ForgetComp extends React.Component {
   constructor(props) {
