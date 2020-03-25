@@ -11,8 +11,7 @@ const UploadPostComp = props => {
     let data = JSON.parse(localStorage.getItem("details"));
     e.preventDefault();
     let formdata = new FormData(e.target);
-    formdata.append("username", data["username"]);
-    formdata.append("userID", data["_id"]);
+    formdata.append("postedBy", data["_id"]);
     Axios.post("http://localhost:8082/post/create", formdata)
       .then(() => {
         // alert("sadasd")
@@ -42,9 +41,10 @@ const UploadPostComp = props => {
               <select name="category">
                 {/* ----------------add category Logic here------------------------- */}
                 {props.categories.map((value, id) => (
-                  <option key={id}>{value.category}</option>
+                  <option key={id} value={value._id}>
+                    {value.category}
+                  </option>
                 ))}
-                <option>others</option>
               </select>
             </li>
             <li>

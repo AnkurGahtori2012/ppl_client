@@ -49,17 +49,15 @@ const App = props => {
               <Route path="*" component={NotFound} />
             </Switch>
           ) : (
-            <>
-              <Switch>
-                <Redirect from="/timeline" to="/" />
-                <Route path="/verify/*" component={VerifyComp} />
-                <Route path="/reset/*" component={ResetComp} />
-                <Route exact path="/" component={LoginComp} />
-                <Route path="/signup" component={RegisterComp} />
-                <Route path="/forget" component={ForgetComp} />
-                <Route path="*" component={NotFound} />
-              </Switch>
-            </>
+            <Switch>
+              <Redirect from="/timeline" to="/" />
+              <Route path="/verify/*" component={VerifyComp} />
+              <Route path="/reset/*" component={ResetComp} />
+              <Route exact path="/" component={LoginComp} />
+              <Route path="/signup" component={RegisterComp} />
+              <Route path="/forget" component={ForgetComp} />
+              <Route path="*" component={NotFound} />
+            </Switch>
           )}
 
           <Footer />

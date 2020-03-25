@@ -2,7 +2,19 @@ import React from "react";
 import { Link, Route } from "react-router-dom";
 import AddCategoryComp from "./AddCategoryComp";
 import ShowCategory from "./ShowCategory";
-function SideNavBar(props) {
+import { connect } from "react-redux";
+const mapStateToProps = state => {
+  return { categories: state.categoryReducer.categories };
+};
+
+function SideNavBar({ categories, history }) {
+  let handleClick = () => {
+    if (categories.length === 0) {
+      alert("add category First");
+    } else {
+      history.push("/timeline/upload");
+    }
+  };
   return (
     <>
       <div className="content_rgt">
@@ -14,7 +26,7 @@ function SideNavBar(props) {
           <span className="btn_sep">
             <img src="/images/btn_sep.png" alt="sep" />
           </span>{" "}
-          <Link to="/timeline/upload">Upload Post</Link>{" "}
+          <Link to="/timeline/addCategory">Add Categories</Link>{" "}
         </div>
         <div className="rght_btn">
           {" "}
@@ -24,7 +36,7 @@ function SideNavBar(props) {
           <span className="btn_sep">
             <img src="/images/btn_sep.png" alt="sep" />
           </span>{" "}
-          <Link to="/timeline/addCategory">Add Categories</Link>{" "}
+          <a onClick={handleClick}>Upload Post</a>{" "}
         </div>
 
         <Route
@@ -65,4 +77,4 @@ function SideNavBar(props) {
     </>
   );
 }
-export default SideNavBar;
+export default connect(mapStateToProps, null)(SideNavBar);
