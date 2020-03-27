@@ -3,7 +3,10 @@ import Axios from "axios";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 const mapStateToProps = state => {
-  return { categories: state.categoryReducer.categories };
+  return {
+    categories: state.categoryReducer.categories,
+    currentUser: state.userReducer.userInfo
+  };
 };
 const mapDispatchToProps = dispatch => {
   return {
@@ -20,7 +23,12 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
-function AddCategoryComp(props) {
+let AddCategoryComp = ({
+  currentUser,
+  categories,
+  setShowAddCategoryPanel,
+  GET_CATEGORY
+}) => {
   const [categoryStatus, setCategoryStatus] = useState("Category");
   const [categoryColor, setcategoryColor] = useState("");
   const handleChange = () => {
@@ -28,26 +36,24 @@ function AddCategoryComp(props) {
     setCategoryStatus("Category");
   };
   const handleFormSubmit = e => {
-    let data = JSON.parse(localStorage.getItem("details"));
     e.preventDefault();
     let formData = new FormData(e.target);
-    formData.append("userID", data["_id"]);
-    Axios.post(
-      "http://localhost:8082/category/addCategory",
-      formData
-    ).then(result => {
-      if (result.data) {
-        let newCategories = [...props.categories];
-        newCategories.push(result.data);
-        props.GET_CATEGORY({
-          categories: newCategories
-        });
-        props.history.push("/timeline");
-      } else {
-        setcategoryColor("#ffcccb");
-        setCategoryStatus("Category already Exist");
+    formData.append("userID", currentUser._id);
+    Axios.post("http://localhost:8082/category/addCategory", formData).then(
+      result => {
+        if (result.data) {
+          let newCategories = [...categories];
+          newCategories.push(result.data);
+          GET_CATEGORY({
+            categories: newCategories
+          });
+          setShowAddCategoryPanel(false);
+        } else {
+          setcategoryColor("#ffcccb");
+          setCategoryStatus("Category already Exist");
+        }
       }
-    });
+    );
   };
 
   return (
@@ -77,14 +83,18 @@ function AddCategoryComp(props) {
         </form>
         <ul>
           <li>
-            <Link to="/timeline">
+            <a
+              onClick={() => {
+                setShowAddCategoryPanel(false);
+              }}
+            >
               <input type="submit" value="Back" />
-            </Link>
+            </a>
           </li>
         </ul>
       </div>
     </>
   );
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddCategoryComp);

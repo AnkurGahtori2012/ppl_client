@@ -1,6 +1,6 @@
 import React from "react";
 
-function SortingComp(props) {
+function SortingComp({ changeSortingCriteria }) {
   return (
     <div>
       <div className="post_div">
@@ -8,7 +8,7 @@ function SortingComp(props) {
           <ul style={{ display: "flex", justifyContent: "space-evenly" }}>
             <li
               onClick={e => {
-                props.changeSortingCriteria(e.target.id);
+                changeSortingCriteria(e.target.id);
               }}
               id="latest"
             >
@@ -19,7 +19,7 @@ function SortingComp(props) {
             </li>
             <li
               onClick={e => {
-                props.changeSortingCriteria(e.target.id);
+                changeSortingCriteria(e.target.id);
               }}
               id="oldest"
             >
@@ -36,7 +36,7 @@ function SortingComp(props) {
               </li> */}
             <li
               onClick={e => {
-                props.changeSortingCriteria(e.target.id);
+                changeSortingCriteria(e.target.id);
               }}
               id="mostClick"
             >
@@ -47,7 +47,7 @@ function SortingComp(props) {
             </li>
             <li
               onClick={e => {
-                props.changeSortingCriteria(e.target.id);
+                changeSortingCriteria(e.target.id);
               }}
               id="mostComment"
             >

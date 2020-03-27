@@ -1,15 +1,15 @@
 import React from "react";
 import WelcomePage from "./WelcomePage";
 import Axios from "axios";
-const ResetComp = props => {
+const ResetComp = ({ history, match }) => {
   let handleSubmit = e => {
     e.preventDefault();
 
     let data = new FormData(e.target);
-    data.append("userID", props.match.params[0]);
+    data.append("userID", match.params[0]);
     Axios.post("http://localhost:8082/user/updatePassword", data).then(
       reseult => {
-        props.history.push("/");
+        history.push("/");
       }
     );
   };

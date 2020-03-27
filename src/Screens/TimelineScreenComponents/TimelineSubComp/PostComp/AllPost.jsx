@@ -15,32 +15,36 @@ const mapStateToProps = state => {
   return { categoriesToDisplay: state.categoryReducer.categoriesToDisplay };
 };
 
-const AllPost = props => {
+const AllPost = ({
+  uploadFlag,
+  handleUpload,
+  sortingCriteria,
+  categoriesToDisplay
+}) => {
   const [posts, setPosts] = useState([]);
   const [postsToDisplay, setPostsToDisplay] = useState([]);
-  const { sortingCriteria, categoriesToDisplay } = props;
   const preSortingCriteria = usePrevious(sortingCriteria);
   const preCategoriesToDisplay = usePrevious(categoriesToDisplay);
   useEffect(() => {
     // console.log("i am did update");
-    if (sortingCriteria != preSortingCriteria || props.uploadFlag) {
+    if (sortingCriteria != preSortingCriteria || uploadFlag) {
       updatePosts();
-      props.handleUpload(false);
+      handleUpload(false);
     }
-  }, [sortingCriteria, props.uploadFlag]);
+  }, [sortingCriteria, uploadFlag]);
 
   useEffect(() => {
     //console.log("this is update for category chaneg");
     if (preCategoriesToDisplay !== categoriesToDisplay) {
       let newPosts = [];
-      if (props.categoriesToDisplay.toLowerCase() === "all") {
+      if (categoriesToDisplay.toLowerCase() === "all") {
         newPosts = [...posts];
       } else {
         //Filtering Categories
         for (let i in posts) {
           if (
-            posts[i]["category"].toLowerCase() ===
-            props.categoriesToDisplay.toLowerCase()
+            posts[i]["category"]["category"].toLowerCase() ===
+            categoriesToDisplay.toLowerCase()
           ) {
             newPosts.push(posts[i]);
           }
@@ -75,24 +79,24 @@ const AllPost = props => {
           newPosts[i]["comment"] = count;
         });
       }
-      if (props.sortingCriteria === "mostComment") {
+      if (sortingCriteria === "mostComment") {
         newPosts.sort((a, b) => {
           return b.comment - a.comment;
         });
         setPosts(newPosts);
         setPostsToDisplay(result.data);
       }
-      if (props.sortingCriteria === "oldest") {
+      if (sortingCriteria === "oldest") {
         setPosts(newPosts);
         setPostsToDisplay(result.data);
-      } else if (props.sortingCriteria === "latest") {
+      } else if (sortingCriteria === "latest") {
         setPosts(newPosts.reverse());
         setPostsToDisplay(result.data);
-      } else if (props.sortingCriteria === "mostClick") {
+      } else if (sortingCriteria === "mostClick") {
         newPosts = sortByLike(newPosts);
         setPosts(newPosts);
         setPostsToDisplay(result.data);
-      } else if (props.sortingCriteria === "mostCommented") {
+      } else if (sortingCriteria === "mostCommented") {
       }
     });
   };

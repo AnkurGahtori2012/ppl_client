@@ -1,22 +1,27 @@
 import React from "react";
 import Axios from "axios";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 const mapStateToProps = state => {
-  return { categories: state.categoryReducer.categories };
+  return {
+    categories: state.categoryReducer.categories,
+    currentUser: state.userReducer.userInfo
+  };
 };
 
-const UploadPostComp = props => {
+const UploadPostComp = ({
+  currentUser,
+  categories,
+  handleUpload,
+  setShowUploadPanel
+}) => {
   const handleFormSubmit = e => {
-    let data = JSON.parse(localStorage.getItem("details"));
     e.preventDefault();
     let formdata = new FormData(e.target);
-    formdata.append("postedBy", data["_id"]);
+    formdata.append("postedBy", currentUser._id);
     Axios.post("http://localhost:8082/post/create", formdata)
       .then(() => {
-        // alert("sadasd")
-        props.handleUpload(true);
-        props.history.push("/timeline");
+        handleUpload(true);
+        setShowUploadPanel(false);
       })
       .catch(errr => {
         alert("error");
@@ -24,8 +29,17 @@ const UploadPostComp = props => {
   };
   return (
     <>
-      <div className="login_sec">
-        <h1>Upload Post</h1>
+      <div className="login_sec popup_sec" style={{ position: "fixed" }}>
+        <div className="clos_btn">
+          <img
+            src="/images/clos.png"
+            alt=""
+            onClick={() => {
+              setShowUploadPanel(false);
+            }}
+          />
+        </div>
+        <div className="pop_hdr">Upload Post</div>
         <form onSubmit={handleFormSubmit}>
           <ul>
             <li>
@@ -40,7 +54,7 @@ const UploadPostComp = props => {
               <span>category</span>
               <select name="category">
                 {/* ----------------add category Logic here------------------------- */}
-                {props.categories.map((value, id) => (
+                {categories.map((value, id) => (
                   <option key={id} value={value._id}>
                     {value.category}
                   </option>
@@ -52,13 +66,6 @@ const UploadPostComp = props => {
             </li>
           </ul>
         </form>
-        <ul>
-          <li>
-            <Link to="/timeline">
-              <input type="submit" value="Back" />
-            </Link>
-          </li>
-        </ul>
       </div>
     </>
   );

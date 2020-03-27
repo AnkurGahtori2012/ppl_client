@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-const Profile = () => {
-  let data = localStorage.getItem("details");
-  const [state] = useState({ user: JSON.parse(data) });
+import React from "react";
+import { connect } from "react-redux";
+const Profile = ({ currentUser }) => {
   return (
     <div className="contnt_1">
       <div className="list_1">
@@ -35,7 +34,7 @@ const Profile = () => {
                 <li>
                   <div className="div_name1">Name :</div>
                   <div className="div_name2">
-                    {state.user.fname + " " + state.user.lname}
+                    {currentUser.fname + " " + currentUser.lname}
                   </div>
                 </li>
                 <li>
@@ -79,4 +78,7 @@ const Profile = () => {
     </div>
   );
 };
-export default Profile;
+let matchStateToProps = state => {
+  return { currentUser: state.userReducer.userInfo };
+};
+export default connect(matchStateToProps, null)(Profile);

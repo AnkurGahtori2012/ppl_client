@@ -18,12 +18,12 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
-const ShowCategory = props => {
+const ShowCategory = ({ CATEGORY_CHANGE, categories }) => {
   const handleChange = e => {
     let category = e.target.parentNode.parentNode.outerHTML
       .split("</span></div>")[0]
       .split("</span><span>")[1];
-    props.CATEGORY_CHANGE({ categoriesToDisplay: category });
+    CATEGORY_CHANGE({ categoriesToDisplay: category });
   };
   return (
     <>
@@ -45,7 +45,7 @@ const ShowCategory = props => {
                 <span>All</span>
               </div>
             </li>
-            {props.categories.map((value, id) => (
+            {categories.map((value, id) => (
               <li key={id}>
                 <div onClick={handleChange}>
                   <span className="list_icon">

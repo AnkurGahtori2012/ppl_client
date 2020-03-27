@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 const mapStateToProps = state => {
   return { loggedIn: state.loginReducer.loggedIn };
 };
-function HeaderLeft(props) {
+let HeaderLeft = ({ loggedIn }) => {
   return (
     <div className="header_lft">
       <div className="logo">
@@ -14,28 +14,27 @@ function HeaderLeft(props) {
       </div>
       <div className="navigatn">
         <ul>
-          <li>
-            <Link to="/timeline/profile">
-              {props.loggedIn ? (
-                <span className="active">Profile</span>
-              ) : (
-                <></>
-              )}
-              {/* <span className="active">Profile</span> */}
-            </Link>
-          </li>
-          {/* <li>
-            <span> E-Coupons </span>
-          </li>
-          <li>
-            <span>E-Brands </span>
-          </li>
-          <li>
-            <span> Resuse Market </span>
-          </li> */}
+          {loggedIn ? (
+            <>
+              <li>
+                <a>Home</a>
+              </li>
+              <li>
+                <a> E-Coupons </a>
+              </li>
+              <li>
+                <a>E-Brands </a>
+              </li>
+              <li>
+                <a> Resuse Market </a>
+              </li>
+            </>
+          ) : (
+            <></>
+          )}
         </ul>
       </div>
     </div>
   );
-}
-export default connect(mapStateToProps,null)(HeaderLeft);
+};
+export default connect(mapStateToProps, null)(HeaderLeft);

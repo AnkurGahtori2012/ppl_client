@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
-
+import { connect } from "react-redux";
 let SubPostComp = props => {
   const [postLoaded, setPostLoaded] = useState(false);
   const [postToDisplay, setPostToDisplay] = useState();
@@ -84,11 +84,9 @@ let SubPostComp = props => {
                     </li>
                     <li
                       onClick={() => {
-                        let data = JSON.parse(localStorage.getItem("details"));
-
                         Axios.post("http://localhost:8082/post/updateLike", {
                           postID: value._id,
-                          userID: data._id
+                          userID: props.currentUser._id
                         }).then(result => {
                           if (result.data) {
                             if (
@@ -117,11 +115,11 @@ let SubPostComp = props => {
                     </div>
                     {/* <li
                       onClick={() => {
-                        let data = JSON.parse(localStorage.getItem("details"));
+                       
                         console.log("clicking unlike inside Axios");
                         Axios.post("http://localhost:8082/post/updateDislike", {
                           postID: value._id,
-                          userID: data.userID
+                          userID: props.currentUser._id
                         }).then(result => {
                           if (result.data) {
                             if (
@@ -156,4 +154,9 @@ let SubPostComp = props => {
     </>
   );
 };
-export default SubPostComp;
+let matchStateToProps = state => {
+  return {
+    currentUser: state.userReducer.userInfo
+  };
+};
+export default connect(matchStateToProps, null)(SubPostComp);

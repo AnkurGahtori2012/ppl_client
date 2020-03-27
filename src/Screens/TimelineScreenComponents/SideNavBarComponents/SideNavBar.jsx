@@ -1,22 +1,30 @@
 import React from "react";
-import { Link, Route } from "react-router-dom";
 import AddCategoryComp from "./AddCategoryComp";
 import ShowCategory from "./ShowCategory";
 import { connect } from "react-redux";
+import { useState } from "react";
+import UploadPostComp from "../../TimelineScreenComponents/TimelineSubComp/UploadPostComp";
 const mapStateToProps = state => {
   return { categories: state.categoryReducer.categories };
 };
-
-function SideNavBar({ categories, history }) {
+const SideNavBar = ({ handleUpload, categories }) => {
+  const [showUploadPanel, setShowUploadPanel] = useState(false);
+  const [showAddCategoryPanel, setShowAddCategoryPanel] = useState(false);
   let handleClick = () => {
     if (categories.length === 0) {
       alert("add category First");
     } else {
-      history.push("/timeline/upload");
+      setShowUploadPanel(true);
     }
   };
   return (
     <>
+      {showUploadPanel ? (
+        <UploadPostComp
+          setShowUploadPanel={setShowUploadPanel}
+          handleUpload={handleUpload}
+        />
+      ) : null}
       <div className="content_rgt">
         <div className="rght_btn">
           {" "}
@@ -26,7 +34,13 @@ function SideNavBar({ categories, history }) {
           <span className="btn_sep">
             <img src="/images/btn_sep.png" alt="sep" />
           </span>{" "}
-          <Link to="/timeline/addCategory">Add Categories</Link>{" "}
+          <a
+            onClick={() => {
+              setShowAddCategoryPanel(true);
+            }}
+          >
+            Add Categories
+          </a>{" "}
         </div>
         <div className="rght_btn">
           {" "}
@@ -39,17 +53,15 @@ function SideNavBar({ categories, history }) {
           <a onClick={handleClick}>Upload Post</a>{" "}
         </div>
 
-        <Route
+        {/* <Route
           exact
           path="/timeline/addCategory"
           render={p => <AddCategoryComp {...p} />}
-        />
-        <Route
-          exact
-          path="/(timeline|timeline/upload|timeline/addCategory)"
-          render={p => <ShowCategory {...p} />}
-        />
-
+        /> */}
+        {showAddCategoryPanel ? (
+          <AddCategoryComp setShowAddCategoryPanel={setShowAddCategoryPanel} />
+        ) : null}
+        <ShowCategory />
         <div className="rght_cate">
           <div className="rght_cate_hd" id="opn_cat_bg">
             Featured
@@ -76,5 +88,5 @@ function SideNavBar({ categories, history }) {
       </div>
     </>
   );
-}
+};
 export default connect(mapStateToProps, null)(SideNavBar);

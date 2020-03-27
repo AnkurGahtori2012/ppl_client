@@ -1,15 +1,15 @@
 import React from "react";
 import Axios from "axios";
 
-const VerifyComp = props => {
-  let id = props.match.params[0];
+const VerifyComp = ({ match, history }) => {
+  let id = match.params[0];
   Axios.post("http://localhost:8082/user/verify", {
     _id: id
   }).then(result => {
     if (result.data) {
-      props.history.push("/");
+      history.push("/");
     } else {
-      props.history.push("/error");
+      history.push("/error");
     }
   });
 

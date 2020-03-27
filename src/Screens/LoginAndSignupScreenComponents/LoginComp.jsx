@@ -3,12 +3,18 @@ import Axios from "axios";
 import { Link, useLocation, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import WelcomePage from "./WelcomePage";
+import { setUserInfoAction } from "../../actions/userAction";
+
 const mapStateToProps = state => {
-  return { loggedIn: state.loginReducer.loggedIn };
+  return {
+    loggedIn: state.loginReducer.loggedIn,
+    userInfo: state.userReducer.userInfo
+  };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    LOGIN: () => dispatch({ type: "LOGIN" })
+    LOGIN: () => dispatch({ type: "LOGIN" }),
+    setUserInfo: payload => dispatch(setUserInfoAction(payload))
   };
 };
 const LoginComp = props => {
@@ -23,9 +29,6 @@ const LoginComp = props => {
     if (loginData) {
       setUsername(loginData[0]);
       setPassword(loginData[1]);
-    }
-    if (localStorage.getItem("details")) {
-      props.history.push("/timeline");
     }
   }, []);
 
@@ -44,30 +47,34 @@ const LoginComp = props => {
       headers: { "content-type": "application/JSON" }
     }).then(result => {
       if (result.data) {
-        if (result.data.verify) {
-          props.LOGIN();
-          // alert("user Found");
-          let email = result.data.email;
-          let password = result.data.password;
-
-          if (rememberMe === "on") {
-            localStorage.setItem(
-              "loginDetail",
-              JSON.stringify([email, password])
-            );
+        localStorage.setItem("userToken", JSON.stringify(result.data));
+        let token = JSON.parse(localStorage.getItem("userToken"));
+        Axios.post("http://localhost:8082/user/verifyUserToken", token).then(
+          result => {
+            if (result.data.verify) {
+              props.LOGIN();
+              // alert("user Found");
+              let email = result.data.email;
+              let password = result.data.password;
+              props.setUserInfo(result.data);
+              if (rememberMe === "on") {
+                localStorage.setItem(
+                  "loginDetail",
+                  JSON.stringify([email, password])
+                );
+              }
+              // setUserInfo(result.data);
+              // props.history.push("/timeline", result.data);
+            } else {
+              setVerifyErrorDisplay("block");
+            }
           }
-          result.data["password"] = "sorry for you";
-          localStorage.setItem("details", JSON.stringify(result.data));
-          props.history.push("/timeline", result.data);
-        } else {
-          setVerifyErrorDisplay("block");
-        }
+        );
       } else {
         setBackground("#ffcccb");
         setEmailStatus("Email-ID or Password Incorrect");
       }
     });
-    console.log("Form Submittting");
   };
   let location = useLocation().pathname.split("/")[1];
   if (location === "timeline") {

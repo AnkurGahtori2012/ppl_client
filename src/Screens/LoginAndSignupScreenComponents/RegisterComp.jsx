@@ -3,18 +3,12 @@ import Axios from "axios";
 import { Link } from "react-router-dom";
 import WelcomePage from "./WelcomePage";
 
-const RegisterComp = props => {
+const RegisterComp = ({ history }) => {
   const [agree, setAgree] = useState("off");
   const [background, setbackground] = useState("");
   const [backgroundCheckBox, setbackgroundCheckBox] = useState("");
   const [emailStatus, setEmailStatus] = useState("email");
   const [registrationDone, setRegistrationDone] = useState(false);
-
-  useEffect(() => {
-    if (localStorage.getItem("details")) {
-      props.history.push("/timeline");
-    }
-  }, []);
   const handleEmailChange = () => {
     if (background === "#ffcccb") {
       setbackground("");
@@ -44,7 +38,7 @@ const RegisterComp = props => {
         if (data.data) {
           setRegistrationDone(true);
           setTimeout(() => {
-            props.history.push("/");
+            history.push("/");
           }, 3000);
         } else {
           setbackground("#ffcccb");
