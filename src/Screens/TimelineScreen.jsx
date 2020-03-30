@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
 import React, { useEffect } from "react";
 import Axios from "axios";
-import SideNavBar from "./SideNavBarComponents/SideNavBar";
-import TimelineComp from "./TimelineSubComp/TimelineComp";
+import SideNavBar from "./TimelineScreenComponents/SideNavBarComponents/SideNavBar";
+import TimelineComp from "./TimelineScreenComponents/TimelineSubComp/TimelineComp";
 import { useState } from "react";
 
 const TimelineScreen = ({ GET_CATEGORY }) => {

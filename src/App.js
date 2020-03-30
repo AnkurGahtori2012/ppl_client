@@ -4,7 +4,7 @@ import Header from "./Component/header/Header";
 import Footer from "./Component/footer/Footer";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import TimelineScreen from "./Screens/TimelineScreenComponents/TimelineScreen";
+import TimelineScreen from "./Screens/TimelineScreen";
 import VerifyComp from "./Screens/LoginAndSignupScreenComponents/VerifyComp";
 import LoginComp from "./Screens/LoginAndSignupScreenComponents/LoginComp";
 import RegisterComp from "./Screens/LoginAndSignupScreenComponents/RegisterComp";
