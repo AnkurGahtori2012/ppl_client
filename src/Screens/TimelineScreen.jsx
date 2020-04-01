@@ -1,9 +1,10 @@
 import { connect } from "react-redux";
 import React, { useEffect } from "react";
 import Axios from "axios";
-import SideNavBar from "./TimelineScreenComponents/SideNavBarComponents/SideNavBar";
-import TimelineComp from "./TimelineScreenComponents/TimelineSubComp/TimelineComp";
+import SideNavBar from "../Component/TimelineComponents/SideNavBarComponents/SideNavBar";
+import TimelineComp from "../Component/TimelineComponents/TimelineSubComp/TimelineComp";
 import { useState } from "react";
+import { url } from "../config/url";
 
 const TimelineScreen = ({ GET_CATEGORY }) => {
   const [refereshUpload, setRefereshUpload] = useState(false);
@@ -14,7 +15,7 @@ const TimelineScreen = ({ GET_CATEGORY }) => {
     getCategories();
   }, []);
   const getCategories = () => {
-    Axios.get("http://localhost:8082/category/getCategories").then(result => {
+    Axios.get(url + "/category/getCategories").then(result => {
       if (result.data) {
         GET_CATEGORY({ categories: result.data });
       } else {

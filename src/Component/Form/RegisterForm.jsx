@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 import WelcomePage from "./WelcomePage";
+import { url } from "../../config/url";
 
 const RegisterComp = ({ history }) => {
   const [agree, setAgree] = useState("off");
@@ -32,7 +33,7 @@ const RegisterComp = ({ history }) => {
       return;
     } else {
       let formData = new FormData(e.target);
-      Axios.post("http://localhost:8082/user/insertUser", formData, {
+      Axios.post(url + "/user/insertUser", formData, {
         headers: { "content-type": "application/JSON" }
       }).then(data => {
         if (data.data) {
@@ -92,7 +93,7 @@ const RegisterComp = ({ history }) => {
                     <input
                       required="required"
                       type="text"
-                      name="fname"
+                      name="firstName"
                       placeholder="Enter your first name"
                     />
                   </li>
@@ -101,7 +102,7 @@ const RegisterComp = ({ history }) => {
                     <input
                       required="required"
                       type="text"
-                      name="lname"
+                      name="lastName"
                       placeholder="Enter your last name"
                     />
                   </li>

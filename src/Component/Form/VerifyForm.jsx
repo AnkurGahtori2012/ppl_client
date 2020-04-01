@@ -1,9 +1,10 @@
 import React from "react";
 import Axios from "axios";
+import { url } from "../../config/url";
 
 const VerifyComp = ({ match, history }) => {
   let id = match.params[0];
-  Axios.post("http://localhost:8082/user/verify", {
+  Axios.post(url + "/user/verify", {
     _id: id
   }).then(result => {
     if (result.data) {

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { url } from "../../../config/url";
 const mapStateToProps = state => {
   return {
     categories: state.categoryReducer.categories,
@@ -39,21 +40,19 @@ let AddCategoryComp = ({
     e.preventDefault();
     let formData = new FormData(e.target);
     formData.append("userID", currentUser._id);
-    Axios.post("http://localhost:8082/category/addCategory", formData).then(
-      result => {
-        if (result.data) {
-          let newCategories = [...categories];
-          newCategories.push(result.data);
-          GET_CATEGORY({
-            categories: newCategories
-          });
-          setShowAddCategoryPanel(false);
-        } else {
-          setcategoryColor("#ffcccb");
-          setCategoryStatus("Category already Exist");
-        }
+    Axios.post(url + "/category/addCategory", formData).then(result => {
+      if (result.data) {
+        let newCategories = [...categories];
+        newCategories.push(result.data);
+        GET_CATEGORY({
+          categories: newCategories
+        });
+        setShowAddCategoryPanel(false);
+      } else {
+        setcategoryColor("#ffcccb");
+        setCategoryStatus("Category already Exist");
       }
-    );
+    });
   };
 
   return (

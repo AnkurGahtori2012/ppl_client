@@ -4,6 +4,7 @@ import { Link, useLocation, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import WelcomePage from "./WelcomePage";
 import { setUserInfoAction } from "../../actions/userAction";
+import { url } from "../../config/url";
 
 const mapStateToProps = state => {
   return {
@@ -43,33 +44,31 @@ const LoginComp = props => {
   const handleSubmit = e => {
     e.preventDefault();
     let formData = new FormData(e.target);
-    Axios.post("http://localhost:8082/user/loginUser", formData, {
+    Axios.post(url + "/user/loginUser", formData, {
       headers: { "content-type": "application/JSON" }
     }).then(result => {
       if (result.data) {
         localStorage.setItem("userToken", JSON.stringify(result.data));
         let token = JSON.parse(localStorage.getItem("userToken"));
-        Axios.post("http://localhost:8082/user/verifyUserToken", token).then(
-          result => {
-            if (result.data.verify) {
-              props.LOGIN();
-              // alert("user Found");
-              let email = result.data.email;
-              let password = result.data.password;
-              props.setUserInfo(result.data);
-              if (rememberMe === "on") {
-                localStorage.setItem(
-                  "loginDetail",
-                  JSON.stringify([email, password])
-                );
-              }
-              // setUserInfo(result.data);
-              // props.history.push("/timeline", result.data);
-            } else {
-              setVerifyErrorDisplay("block");
+        Axios.post(url + "/user/verifyUserToken", token).then(result => {
+          if (result.data.verify) {
+            props.LOGIN();
+            // alert("user Found");
+            let email = result.data.email;
+            let password = result.data.password;
+            props.setUserInfo(result.data);
+            if (rememberMe === "on") {
+              localStorage.setItem(
+                "loginDetail",
+                JSON.stringify([email, password])
+              );
             }
+            // setUserInfo(result.data);
+            // props.history.push("/timeline", result.data);
+          } else {
+            setVerifyErrorDisplay("block");
           }
-        );
+        });
       } else {
         setBackground("#ffcccb");
         setEmailStatus("Email-ID or Password Incorrect");

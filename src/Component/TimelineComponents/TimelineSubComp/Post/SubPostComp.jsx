@@ -3,11 +3,13 @@ import Axios from "axios";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import { connect } from "react-redux";
+import { url } from "../../../../config/url";
 let SubPostComp = props => {
   const [postLoaded, setPostLoaded] = useState(false);
   const [postToDisplay, setPostToDisplay] = useState();
 
   useEffect(() => {
+    console.log(props.value, "*********");
     setPostToDisplay(props.value);
     setPostLoaded(true);
   }, []);
@@ -21,7 +23,7 @@ let SubPostComp = props => {
             <div className="div_a">
               <div className="div_title">{value.title}</div>
               <div className="btm_rgt">
-                <div className="btm_arc">{value.category.category}</div>
+                <div className="btm_arc">{value.category.categoryName}</div>
               </div>
               <div className="div_top">
                 <div className="div_top_lft">
@@ -48,12 +50,11 @@ let SubPostComp = props => {
               >
                 <Link to={"/timeline/" + value._id}>
                   <img
-                    src={"http://localhost:8082/post/" + props.value.image}
+                    src={url + "/post/" + props.value.image}
                     alt="pet"
                     style={{ height: "200px", width: "200px" }}
                   />
                 </Link>
-                {/* <img src={"/post/" + value.image} alt="pet" /> */}
               </div>
               <div className="div_btm">
                 <div className="btm_list">
@@ -79,12 +80,12 @@ let SubPostComp = props => {
                         <span className="btn_icon">
                           <img src="/images/icon_004.png" alt="share" />
                         </span>
-                        Comments {value.comment}
+                        Comments {value.comments.length}
                       </Link>
                     </li>
                     <li
                       onClick={() => {
-                        Axios.post("http://localhost:8082/post/updateLike", {
+                        Axios.post(url + "/post/updateLike", {
                           postID: value._id,
                           userID: props.currentUser._id
                         }).then(result => {
@@ -97,7 +98,6 @@ let SubPostComp = props => {
                                 ...value,
                                 like: result.data.like
                               });
-                              console.log("New data is", postToDisplay);
                             }
                           }
                         });
@@ -113,35 +113,6 @@ let SubPostComp = props => {
                       <span className="mid_cnt">{value.like.length}</span>
                       <span className="rit_cnt" />
                     </div>
-                    {/* <li
-                      onClick={() => {
-                       
-                        console.log("clicking unlike inside Axios");
-                        Axios.post("http://localhost:8082/post/updateDislike", {
-                          postID: value._id,
-                          userID: props.currentUser._id
-                        }).then(result => {
-                          if (result.data) {
-                            if (
-                              result.data.dislike.length !=
-                              this.state.postToDisplay.dislike.length
-                            ) {
-                              this.setState({ postToDisplay: result.data });
-                            }
-                          }
-                        });
-                      }}
-                    >
-                      <span className="btn_icon">
-                        <img src="/images/icon_003.png" alt="share" />
-                      </span>
-                      Unlike
-                    </li> */}
-                    {/* <div className="like_count">
-                      <span className="lft_cnt" />
-                      <span className="mid_cnt">{value.dislike.length}</span>
-                      <span className="rit_cnt" />
-                    </div> */}
                   </ul>
                 </div>
               </div>

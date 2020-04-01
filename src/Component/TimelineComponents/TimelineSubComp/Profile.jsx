@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+
 import { connect } from "react-redux";
-const Profile = ({ currentUser }) => {
+import Axios from "axios";
+import { setUserInfoAction } from "../../../actions/userAction";
+import { url } from "../../../config/url";
+const Profile = ({ currentUser, setUserInfo }) => {
+  console.log(currentUser, "current user is ");
   return (
     <div className="contnt_1">
       <div className="list_1">
@@ -18,9 +24,9 @@ const Profile = ({ currentUser }) => {
       <div className="timeline_div">
         <div className="timeline_div1">
           <div className="profile_pic">
-            <img alt="Img" src="/images/timeline_img1.png" />
+            <img alt="Img" src={url + "/profile/" + currentUser.image || ""} />
             <div className="profile_text">
-              <a href={window.location.href}>Change Profile Pic</a>
+              <MyDropzone setUserInfo={setUserInfo} currentUser={currentUser} />
             </div>
           </div>
           <div className="profile_info">
@@ -34,7 +40,7 @@ const Profile = ({ currentUser }) => {
                 <li>
                   <div className="div_name1">Name :</div>
                   <div className="div_name2">
-                    {currentUser.fname + " " + currentUser.lname}
+                    {currentUser.firstName + " " + currentUser.lastName}
                   </div>
                 </li>
                 <li>
@@ -81,4 +87,28 @@ const Profile = ({ currentUser }) => {
 let matchStateToProps = state => {
   return { currentUser: state.userReducer.userInfo };
 };
-export default connect(matchStateToProps, null)(Profile);
+let MyDropzone = ({ setUserInfo, currentUser }) => {
+  const onDrop = useCallback(acceptedFiles => {
+    let formData = new FormData();
+    formData.append("userID", currentUser._id);
+    formData.append("image", acceptedFiles[0]);
+    Axios.post(url + "/user/updateUser", formData).then(result => {
+      if (result.data) {
+        console.log("resting data");
+        setUserInfo(result.data);
+      }
+    });
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  return (
+    <div {...getRootProps()}>
+      <input {...getInputProps()} name="image" />
+      {isDragActive ? <p>Drop the files here ...</p> : <p>Change Profile</p>}
+    </div>
+  );
+};
+const mapDispatchToProps = dispatch => ({
+  setUserInfo: payload => dispatch(setUserInfoAction(payload))
+});
+export default connect(matchStateToProps, mapDispatchToProps)(Profile);

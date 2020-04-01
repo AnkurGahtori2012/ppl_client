@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import Profile from "./Profile";
 import SortingComp from "./SortingComp";
-import AllPost from "./PostComp/AllPost";
+import AllPost from "./Post/AllPost";
 const TimelineComp = ({ handleUpload, uploadFlag }) => {
   const [sortingCriteria, setSortingCriteria] = useState("latest");
 
   const changeSortingCriteria = value => {
     setSortingCriteria(value);
   };
-
   return (
     <div className="content_lft">
       <Profile />

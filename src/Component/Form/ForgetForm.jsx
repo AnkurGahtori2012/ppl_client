@@ -2,13 +2,19 @@ import React from "react";
 import WelcomePage from "./WelcomePage";
 import Axios from "axios";
 import { useState } from "react";
-let ForgetComp = () => {
+import { url } from "../../config/url";
+let ForgetComp = ({ history }) => {
   const [display, setDisplay] = useState("block");
   let handleSubmit = e => {
     e.preventDefault();
     let data = new FormData(e.target);
-    Axios.post("http://localhost:8082/sendMail", data).then(reseult => {});
-    setDisplay("none");
+    Axios.post(url + "/user/sendMail", data).then(result => {
+      if (!result.data) {
+        alert("User not registered signup please");
+        history.push("/");
+      }
+      setDisplay("none");
+    });
   };
   return (
     <>
@@ -16,13 +22,10 @@ let ForgetComp = () => {
         <div className="content">
           <WelcomePage />
           <div className="content_rgt">
-            {this.state.display === "block" ? (
-              <div
-                className="register_sec"
-                style={{ display: this.state.display }}
-              >
+            {display === "block" ? (
+              <div className="register_sec" style={{ display: display }}>
                 <h1>Forgot Password</h1>
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={handleSubmit}>
                   <ul>
                     <li>
                       <span>Enter E-mail ID</span>

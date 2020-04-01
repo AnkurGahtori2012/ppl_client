@@ -1,6 +1,8 @@
 import React from "react";
 import Axios from "axios";
 import { connect } from "react-redux";
+import { url } from "../../config/url";
+
 const mapStateToProps = state => {
   return {
     categories: state.categoryReducer.categories,
@@ -18,7 +20,7 @@ const UploadPostComp = ({
     e.preventDefault();
     let formdata = new FormData(e.target);
     formdata.append("postedBy", currentUser._id);
-    Axios.post("http://localhost:8082/post/create", formdata)
+    Axios.post(url + "/post/create", formdata)
       .then(() => {
         handleUpload(true);
         setShowUploadPanel(false);

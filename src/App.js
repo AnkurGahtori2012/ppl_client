@@ -5,34 +5,33 @@ import Footer from "./Component/footer/Footer";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import TimelineScreen from "./Screens/TimelineScreen";
-import VerifyComp from "./Screens/LoginAndSignupScreenComponents/VerifyComp";
-import LoginComp from "./Screens/LoginAndSignupScreenComponents/LoginComp";
-import RegisterComp from "./Screens/LoginAndSignupScreenComponents/RegisterComp";
-import ForgetComp from "./Screens/LoginAndSignupScreenComponents/ForgetComp";
+import VerifyComp from "./Component/Form/VerifyForm";
+import LoginComp from "./Component/Form/LoginForm";
+import RegisterComp from "./Component/Form/RegisterForm";
+import ForgetComp from "./Component/Form/ForgetForm";
 import NotFound from "./Screens/NotFoundScreen";
 import LoadingScreen from "./Screens/LoadingScreen";
-import ResetComp from "./Screens/LoginAndSignupScreenComponents/ResetComp";
+import ResetComp from "./Component/Form/ResetForm";
 import Axios from "axios";
-import SinglePost from "./Screens/TimelineScreenComponents/TimelineSubComp/PostComp/SinglePost";
+import SinglePost from "./Component/TimelineComponents/TimelineSubComp/Post/SinglePost";
 import { setUserInfoAction } from "./actions/userAction";
-
+import { url } from "./config/url";
 const App = ({ LOGOUT, LOGIN, loggedIn, setUserInfo }) => {
   let [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     if (localStorage.getItem("userToken")) {
       let token = JSON.parse(localStorage.getItem("userToken"));
-      Axios.post("http://localhost:8082/user/verifyUserToken", token).then(
-        result => {
-          if (result.data.verify) {
-            setUserInfo(result.data);
-            LOGIN();
-            setIsLoading(false);
-          } else {
-            LOGOUT();
-            setIsLoading(false);
-          }
+      Axios.post(url + "/user/verifyUserToken", token).then(result => {
+        if (result.data.verify) {
+          console.log(result.data, "current user is ");
+          setUserInfo(result.data);
+          LOGIN();
+          setIsLoading(false);
+        } else {
+          LOGOUT();
+          setIsLoading(false);
         }
-      );
+      });
     } else {
       LOGOUT();
       setIsLoading(false);

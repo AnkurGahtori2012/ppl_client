@@ -1,17 +1,16 @@
 import React from "react";
 import WelcomePage from "./WelcomePage";
 import Axios from "axios";
+import { url } from "../../config/url";
 const ResetComp = ({ history, match }) => {
   let handleSubmit = e => {
     e.preventDefault();
 
     let data = new FormData(e.target);
     data.append("userID", match.params[0]);
-    Axios.post("http://localhost:8082/user/updatePassword", data).then(
-      reseult => {
-        history.push("/");
-      }
-    );
+    Axios.post(url + "/user/updatePassword", data).then(reseult => {
+      history.push("/");
+    });
   };
   return (
     <>

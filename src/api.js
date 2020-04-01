@@ -2,7 +2,7 @@ import Axios from "axios";
 export const getCategories = async () => {
   return 40;
   let data;
-  await Axios.get("http://localhost:8082/category/getCategories").then(
+  await Axios.get("http://192.168.43.83:8082/category/getCategories").then(
     result => {
       if (result.data) {
         data = {
@@ -15,7 +15,7 @@ export const getCategories = async () => {
 };
 export const addCategories = async formData => {
   await Axios.post(
-    "http://localhost:8082/category/addCategory",
+    "http://192.168.43.83:8082/category/addCategory",
     formData
   ).then(result => {
     if (result.data) {

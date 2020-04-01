@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import Moment from "react-moment";
-import LoadingScreen from "../../../LoadingScreen";
+import LoadingScreen from "../../../../Screens/LoadingScreen";
 import { connect } from "react-redux";
+import { url } from "../../../../config/url";
 let matchStateToProps = state => {
   return { currentUser: state.userReducer.userInfo };
 };
@@ -14,13 +15,7 @@ const SinglePost = ({ currentUser, location, history }) => {
     category: { category: "" }
   });
   const [comments, setComments] = useState([
-    {
-      userID: "",
-      comment: "",
-      username: "",
-      profilePic: "",
-      commentBy: { username: "" }
-    }
+    { comment: "", commentedBy: { username: "" } }
   ]);
   const cancelCourse = () => {
     document.getElementById("create-course-form").reset();
@@ -28,19 +23,20 @@ const SinglePost = ({ currentUser, location, history }) => {
   const handleCommentSubmit = e => {
     e.preventDefault();
     let formdata = new FormData(e.target);
-    formdata.append("commentBy", currentUser._id);
+    formdata.append("commentedBy", currentUser._id);
     formdata.append("postID", location.pathname.split("timeline/")[1]);
-    Axios.post("http://localhost:8082/comment/addComment", formdata).then(
-      result => {
-        let newcomments = [...comments];
-        newcomments.push(result.data);
-        setComments(newcomments);
-        cancelCourse();
-      }
-    );
+    Axios.post(url + "/post/addComment", formdata).then(result => {
+      // newcomments.push(result.data.comments);
+
+      setComments([
+        ...comments,
+        result.data.comments[result.data.comments.length - 1]
+      ]);
+      cancelCourse();
+    });
   };
   let getPostByID = async id => {
-    let result = await Axios.post("http://localhost:8082/post/getPostByID", id);
+    let result = await Axios.post(url + "/post/getPostByID", id);
     return result;
   };
   useEffect(() => {
@@ -48,15 +44,11 @@ const SinglePost = ({ currentUser, location, history }) => {
     getPostByID(id).then(result => {
       if (result.data) {
         setPostToDisplay(result.data);
+
+        setComments(result.data.comments);
       } else {
         history.push("/error");
       }
-    });
-
-    Axios.post("http://localhost:8082/comment/getComment", {
-      postID: location.pathname.split("timeline/")[1]
-    }).then(result => {
-      setComments(result.data);
     });
   }, []);
   let value = postToDisplay;
@@ -71,7 +63,9 @@ const SinglePost = ({ currentUser, location, history }) => {
                   <div className="div_a">
                     <div className="div_title">{value.title}</div>
                     <div className="btm_rgt">
-                      <div className="btm_arc">{value.category.category}</div>
+                      <div className="btm_arc">
+                        {value.category.categoryName}
+                      </div>
                     </div>
                     <div className="div_top">
                       <div className="div_top_lft">
@@ -93,10 +87,7 @@ const SinglePost = ({ currentUser, location, history }) => {
                       </div>
                     </div>
                     <div className="div_image">
-                      <img
-                        src={"http://localhost:8082/post/" + value.image}
-                        alt="pet"
-                      />
+                      <img src={url + "/post/" + value.image} alt="pet" />
                     </div>
                     <div className="div_btm">
                       <div className="btm_list">
@@ -125,13 +116,10 @@ const SinglePost = ({ currentUser, location, history }) => {
                           </li>
                           <li
                             onClick={() => {
-                              Axios.post(
-                                "http://localhost:8082/post/updateLike",
-                                {
-                                  postID: value._id,
-                                  userID: currentUser._id
-                                }
-                              ).then(result => {
+                              Axios.post(url + "/post/updateLike", {
+                                postID: value._id,
+                                userID: currentUser._id
+                              }).then(result => {
                                 if (result.data) {
                                   if (
                                     result.data.like.length !=
@@ -156,33 +144,6 @@ const SinglePost = ({ currentUser, location, history }) => {
                             <span className="mid_cnt">{value.like.length}</span>
                             <span className="rit_cnt" />
                           </div>
-                          {/* <li
-                      onClick={() => {
-                        Axios.post("http://localhost:8082/post/updateDislike", {
-                          postID: value._id,
-                          userID: currentUser._id
-                        }).then(result => {
-                          if (result.data) {
-                            if (
-                              result.data.dislike.length !=
-                              postToDisplay.dislike.length
-                            ) {
-                              setState({ postToDisplay: result.data });
-                            }
-                          }
-                        });
-                      }}
-                    >
-                      <span className="btn_icon">
-                        <img src="/images/icon_003.png" alt="share" />
-                      </span>
-                      Unlike
-                    </li> */}
-                          {/* <div className="like_count">
-                      <span className="lft_cnt" />
-                      <span className="mid_cnt">{value.dislike.length}</span>
-                      <span className="rit_cnt" />
-                    </div> */}
                         </ul>
                       </div>
                     </div>
@@ -200,7 +161,7 @@ const SinglePost = ({ currentUser, location, history }) => {
                                 <img src="/images/post_img.png" />
                               </div>
                               <div className="image_name">
-                                {result.commentBy.username}
+                                {result.commentedBy.username}
                               </div>
                             </div>
                             <div className="list_info">{result.comment}</div>

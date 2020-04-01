@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { url } from "../../../config/url";
 const mapStateToProps = state => {
   return { categories: state.categoryReducer.categories };
 };
@@ -51,12 +52,12 @@ const ShowCategory = ({ CATEGORY_CHANGE, categories }) => {
                   <span className="list_icon">
                     <img
                       alt="Img"
-                      src={"http://localhost:8082/post/" + value.image}
+                      src={url + "/post/" + value.image}
                       alt="up"
                       style={{ maxHeight: "40px", maxWidth: "40px" }}
                     />
                   </span>
-                  <span>{value.category}</span>
+                  <span>{value.categoryName}</span>
                 </div>
               </li>
             ))}
