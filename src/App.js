@@ -14,26 +14,26 @@ import LoadingScreen from "./Screens/LoadingScreen";
 import ResetComp from "./Component/Form/ResetForm";
 import Axios from "axios";
 import SinglePost from "./Component/TimelineComponents/TimelineSubComp/Post/SinglePost";
-import { setUserInfoAction } from "./actions/userAction";
+import { setUserInfo } from "./actions/userAction";
 import { url } from "./config/url";
-const App = ({ LOGOUT, LOGIN, loggedIn, setUserInfo }) => {
+import { login, logout } from "./actions/userAction";
+const App = ({ logout, login, loggedIn, setUserInfo }) => {
   let [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     if (localStorage.getItem("userToken")) {
       let token = JSON.parse(localStorage.getItem("userToken"));
       Axios.post(url + "/user/verifyUserToken", token).then(result => {
         if (result.data.verify) {
-          console.log(result.data, "current user is ");
           setUserInfo(result.data);
-          LOGIN();
+          login();
           setIsLoading(false);
         } else {
-          LOGOUT();
+          logout();
           setIsLoading(false);
         }
       });
     } else {
-      LOGOUT();
+      logout();
       setIsLoading(false);
     }
   }, []);
@@ -78,9 +78,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setUserInfo: payload => dispatch(setUserInfoAction(payload)),
-  LOGIN: () => dispatch({ type: "LOGIN" }),
-  LOGOUT: () => dispatch({ type: "LOGOUT" })
+  setUserInfo: payload => dispatch(setUserInfo(payload)),
+  login: () => dispatch(login()),
+  logout: () => dispatch(logout())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

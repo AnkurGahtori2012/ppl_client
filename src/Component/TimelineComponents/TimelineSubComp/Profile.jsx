@@ -1,12 +1,10 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-
 import { connect } from "react-redux";
 import Axios from "axios";
-import { setUserInfoAction } from "../../../actions/userAction";
+import { setUserInfo } from "../../../actions/userAction";
 import { url } from "../../../config/url";
 const Profile = ({ currentUser, setUserInfo }) => {
-  console.log(currentUser, "current user is ");
   return (
     <div className="contnt_1">
       <div className="list_1">
@@ -24,7 +22,10 @@ const Profile = ({ currentUser, setUserInfo }) => {
       <div className="timeline_div">
         <div className="timeline_div1">
           <div className="profile_pic">
-            <img alt="Img" src={url + "/profile/" + currentUser.image || ""} />
+            <img
+              alt="Img"
+              src={url + "/profile/" + currentUser.image || "/images/pic.png"}
+            />
             <div className="profile_text">
               <MyDropzone setUserInfo={setUserInfo} currentUser={currentUser} />
             </div>
@@ -84,17 +85,16 @@ const Profile = ({ currentUser, setUserInfo }) => {
     </div>
   );
 };
-let matchStateToProps = state => {
+const matchStateToProps = state => {
   return { currentUser: state.userReducer.userInfo };
 };
-let MyDropzone = ({ setUserInfo, currentUser }) => {
+const MyDropzone = ({ setUserInfo, currentUser }) => {
   const onDrop = useCallback(acceptedFiles => {
     let formData = new FormData();
     formData.append("userID", currentUser._id);
     formData.append("image", acceptedFiles[0]);
-    Axios.post(url + "/user/updateUser", formData).then(result => {
+    Axios.post(url + "/user/updateProfilePic", formData).then(result => {
       if (result.data) {
-        console.log("resting data");
         setUserInfo(result.data);
       }
     });
@@ -109,6 +109,6 @@ let MyDropzone = ({ setUserInfo, currentUser }) => {
   );
 };
 const mapDispatchToProps = dispatch => ({
-  setUserInfo: payload => dispatch(setUserInfoAction(payload))
+  setUserInfo: payload => dispatch(setUserInfo(payload))
 });
 export default connect(matchStateToProps, mapDispatchToProps)(Profile);

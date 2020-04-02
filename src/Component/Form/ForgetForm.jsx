@@ -8,7 +8,7 @@ let ForgetComp = ({ history }) => {
   let handleSubmit = e => {
     e.preventDefault();
     let data = new FormData(e.target);
-    Axios.post(url + "/user/sendMail", data).then(result => {
+    Axios.post(url + "/user/resetPassword", data).then(result => {
       if (!result.data) {
         alert("User not registered signup please");
         history.push("/");

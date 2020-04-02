@@ -1,14 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-const mapStateToProps = state => {
-  return { loggedIn: state.loginReducer.loggedIn };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    LOGOUT: () => dispatch({ type: "LOGOUT" })
-  };
-};
+import { logout } from "../../../actions/userAction";
 const HeaderRight = props => {
   return (
     <div className="header_rgt">
@@ -23,7 +15,7 @@ const HeaderRight = props => {
   );
 };
 
-function Status({ loggedIn, LOGOUT }) {
+function Status({ loggedIn, logout }) {
   if (loggedIn) {
     return (
       <div className="pro_info pull-right">
@@ -40,7 +32,7 @@ function Status({ loggedIn, LOGOUT }) {
               href=""
               onClick={() => {
                 localStorage.removeItem("userToken");
-                LOGOUT();
+                logout();
               }}
             >
               Logout
@@ -69,4 +61,12 @@ function Status({ loggedIn, LOGOUT }) {
   return <></>;
 }
 
+const mapStateToProps = state => {
+  return { loggedIn: state.loginReducer.loggedIn };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(logout())
+  };
+};
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderRight);

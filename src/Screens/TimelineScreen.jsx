@@ -5,8 +5,8 @@ import SideNavBar from "../Component/TimelineComponents/SideNavBarComponents/Sid
 import TimelineComp from "../Component/TimelineComponents/TimelineSubComp/TimelineComp";
 import { useState } from "react";
 import { url } from "../config/url";
-
-const TimelineScreen = ({ GET_CATEGORY }) => {
+import { setCategories } from "../actions/categoryAction";
+const TimelineScreen = ({ setCategories }) => {
   const [refereshUpload, setRefereshUpload] = useState(false);
   const changeOnUploading = value => {
     setRefereshUpload(value); //this will send new props to post and new post will be loaded in webpage
@@ -17,7 +17,7 @@ const TimelineScreen = ({ GET_CATEGORY }) => {
   const getCategories = () => {
     Axios.get(url + "/category/getCategories").then(result => {
       if (result.data) {
-        GET_CATEGORY({ categories: result.data });
+        setCategories(result.data);
       } else {
         alert("no category to show");
       }
@@ -38,11 +38,8 @@ const TimelineScreen = ({ GET_CATEGORY }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    GET_CATEGORY: data => {
-      dispatch({
-        type: "GET_CATEGORY",
-        categories: data.categories
-      });
+    setCategories: data => {
+      dispatch(setCategories(data));
     }
   };
 };

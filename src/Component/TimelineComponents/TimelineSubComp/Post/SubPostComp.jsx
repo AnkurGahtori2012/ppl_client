@@ -4,12 +4,11 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import { connect } from "react-redux";
 import { url } from "../../../../config/url";
-let SubPostComp = props => {
+const SubPostComp = props => {
   const [postLoaded, setPostLoaded] = useState(false);
   const [postToDisplay, setPostToDisplay] = useState();
 
   useEffect(() => {
-    console.log(props.value, "*********");
     setPostToDisplay(props.value);
     setPostLoaded(true);
   }, []);
@@ -33,13 +32,13 @@ let SubPostComp = props => {
                 <div className="div_top_rgt">
                   <span className="span_date">
                     <Moment format="D MMM YYYY" withTitle>
-                      {value.time}
+                      {value.date}
                     </Moment>
                   </span>
                   <span className="span_time">
                     {" "}
                     <Moment format="hh : mm a" withTitle>
-                      {value.time}
+                      {value.date}
                     </Moment>
                   </span>
                 </div>

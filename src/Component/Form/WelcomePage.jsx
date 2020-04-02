@@ -1,5 +1,5 @@
 import React from "react";
-let TimelineComp = () => {
+const TimelineComp = () => {
   return (
     <>
       <div className="content_lft">

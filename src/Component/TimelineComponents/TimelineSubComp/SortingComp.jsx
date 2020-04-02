@@ -1,6 +1,6 @@
 import React from "react";
 
-function SortingComp({ changeSortingCriteria }) {
+const SortingComp = ({ changeSortingCriteria }) => {
   return (
     <div>
       <div className="post_div">
@@ -28,12 +28,7 @@ function SortingComp({ changeSortingCriteria }) {
               </span>
               Oldest First
             </li>
-            {/* <li onClick={this.handleCriteriaChange} id="mostPet">
-                <span className="list_img">
-                  <img src="/images/img_3.png" />
-                </span>
-                Most Pet
-              </li> */}
+
             <li
               onClick={e => {
                 changeSortingCriteria(e.target.id);
@@ -61,5 +56,5 @@ function SortingComp({ changeSortingCriteria }) {
       </div>
     </div>
   );
-}
+};
 export default SortingComp;

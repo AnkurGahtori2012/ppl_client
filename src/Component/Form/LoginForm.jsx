@@ -3,22 +3,9 @@ import Axios from "axios";
 import { Link, useLocation, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import WelcomePage from "./WelcomePage";
-import { setUserInfoAction } from "../../actions/userAction";
+import { setUserInfo, login } from "../../actions/userAction";
 import { url } from "../../config/url";
-
-const mapStateToProps = state => {
-  return {
-    loggedIn: state.loginReducer.loggedIn,
-    userInfo: state.userReducer.userInfo
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    LOGIN: () => dispatch({ type: "LOGIN" }),
-    setUserInfo: payload => dispatch(setUserInfoAction(payload))
-  };
-};
-const LoginComp = props => {
+const LoginComp = ({ setUserInfo, login, history }) => {
   const [background, setBackground] = useState("");
   const [emailStatus, setEmailStatus] = useState("Email-ID");
   const [rememberMe, setRememberMe] = useState("off");
@@ -52,19 +39,17 @@ const LoginComp = props => {
         let token = JSON.parse(localStorage.getItem("userToken"));
         Axios.post(url + "/user/verifyUserToken", token).then(result => {
           if (result.data.verify) {
-            props.LOGIN();
+            login();
             // alert("user Found");
             let email = result.data.email;
             let password = result.data.password;
-            props.setUserInfo(result.data);
+            setUserInfo(result.data);
             if (rememberMe === "on") {
               localStorage.setItem(
                 "loginDetail",
                 JSON.stringify([email, password])
               );
             }
-            // setUserInfo(result.data);
-            // props.history.push("/timeline", result.data);
           } else {
             setVerifyErrorDisplay("block");
           }
@@ -77,7 +62,7 @@ const LoginComp = props => {
   };
   let location = useLocation().pathname.split("/")[1];
   if (location === "timeline") {
-    props.history.push("/");
+    history.push("/");
   }
   return (
     <div className="container">
@@ -144,5 +129,17 @@ const LoginComp = props => {
       </div>
     </div>
   );
+};
+const mapStateToProps = state => {
+  return {
+    loggedIn: state.loginReducer.loggedIn,
+    userInfo: state.userReducer.userInfo
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    login: () => dispatch(login),
+    setUserInfo: payload => dispatch(setUserInfo(payload))
+  };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginComp);

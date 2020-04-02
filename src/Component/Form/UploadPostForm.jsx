@@ -3,13 +3,6 @@ import Axios from "axios";
 import { connect } from "react-redux";
 import { url } from "../../config/url";
 
-const mapStateToProps = state => {
-  return {
-    categories: state.categoryReducer.categories,
-    currentUser: state.userReducer.userInfo
-  };
-};
-
 const UploadPostComp = ({
   currentUser,
   categories,
@@ -58,7 +51,7 @@ const UploadPostComp = ({
                 {/* ----------------add category Logic here------------------------- */}
                 {categories.map((value, id) => (
                   <option key={id} value={value._id}>
-                    {value.category}
+                    {value.categoryName}s
                   </option>
                 ))}
               </select>
@@ -71,5 +64,11 @@ const UploadPostComp = ({
       </div>
     </>
   );
+};
+const mapStateToProps = state => {
+  return {
+    categories: state.categoryReducer.categories,
+    currentUser: state.userReducer.userInfo
+  };
 };
 export default connect(mapStateToProps, null)(UploadPostComp);

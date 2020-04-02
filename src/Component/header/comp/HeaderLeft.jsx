@@ -1,10 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-const mapStateToProps = state => {
-  return { loggedIn: state.loginReducer.loggedIn };
-};
-let HeaderLeft = ({ loggedIn }) => {
+const HeaderLeft = ({ loggedIn }) => {
   return (
     <div className="header_lft">
       <div className="logo">
@@ -36,5 +33,8 @@ let HeaderLeft = ({ loggedIn }) => {
       </div>
     </div>
   );
+};
+const mapStateToProps = state => {
+  return { loggedIn: state.loginReducer.loggedIn };
 };
 export default connect(mapStateToProps, null)(HeaderLeft);

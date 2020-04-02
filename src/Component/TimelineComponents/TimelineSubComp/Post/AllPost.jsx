@@ -11,92 +11,96 @@ function usePrevious(value) {
   return ref.current;
 }
 
-const mapStateToProps = state => {
-  return { categoriesToDisplay: state.categoryReducer.categoriesToDisplay };
-};
-
 const AllPost = ({
   uploadFlag,
   handleUpload,
   sortingCriteria,
   categoriesToDisplay
 }) => {
-  const [posts, setPosts] = useState([]);
   const [postsToDisplay, setPostsToDisplay] = useState([]);
   const preSortingCriteria = usePrevious(sortingCriteria);
   const preCategoriesToDisplay = usePrevious(categoriesToDisplay);
-  const limit = 1;
+  const limit = 2;
   const [skip, increaseSkip] = useState(0);
   useEffect(() => {
-    // console.log("i am did update");
-    if (sortingCriteria != preSortingCriteria || uploadFlag) {
-      // updatePosts();
+    if (sortingCriteria !== preSortingCriteria) {
+      console.log(sortingCriteria, "changing criteria", preSortingCriteria);
+      if (skip !== 0) increaseSkip(0);
+      else updatePosts();
+    } else if (uploadFlag) {
       handleUpload(false);
+      alert("you just added new post");
+    } else if (
+      preCategoriesToDisplay.categoryName !== categoriesToDisplay.categoryName
+    ) {
+      sortingCriteria = "latest";
+      if (skip !== 0) increaseSkip(0);
+      else updatePosts();
     }
-  }, [sortingCriteria, uploadFlag]);
+  }, [sortingCriteria, uploadFlag, categoriesToDisplay]);
 
-  useEffect(() => {
-    // if (preCategoriesToDisplay !== categoriesToDisplay) {
-    let newPosts = [];
-    if (categoriesToDisplay.toLowerCase() === "all") {
-      newPosts = [...posts];
-    } else {
-      for (let i in posts) {
-        if (
-          posts[i]["category"]["categoryName"].toLowerCase() ===
-          categoriesToDisplay.toLowerCase()
-        ) {
-          newPosts.push(posts[i]);
-        }
-      }
-    }
-    console.log("updating current posts");
-    setPostsToDisplay(newPosts);
-    // }
-  }, [categoriesToDisplay, posts]);
-
-  // const sortByLike = arr => {
-  //   arr.sort(function(a, b) {
-  //     return b.like.length - a.like.length;
-  //   });
-  // };
   useEffect(() => {
     updatePosts();
   }, [skip]);
   const updatePosts = () => {
+    let sort;
+    let order;
+    if (sortingCriteria === "mostComment") {
+      sort = "comments";
+      order = -1;
+    } else if (sortingCriteria === "oldest") {
+      sort = "date";
+      order = 1;
+    } else if (sortingCriteria === "latest") {
+      sort = "date";
+      order = -1;
+    } else if (sortingCriteria === "mostClick") {
+      sort = "like";
+      order = 1;
+    }
+    let category;
+    if (categoriesToDisplay.categoryName === "ALL") {
+      category = "Fake_ID";
+    } else {
+      category = categoriesToDisplay._id;
+    }
     Axios.get(url + "/post/getPost", {
-      params: { skip: skip, limit: limit, sort: "date", order: 1 }
+      params: {
+        skip: skip,
+        limit: limit,
+        sort: sort,
+        order: order,
+        category: category
+      }
     }).then(async result => {
       if (result.data) {
-        setPosts([...posts, ...result.data]);
+        if (skip !== 0) setPostsToDisplay([...postsToDisplay, ...result.data]);
+        else {
+          setPostsToDisplay(result.data);
+        }
       }
-
-      // if (sortingCriteria === "mostComment") {
-      //   newPosts.sort((a, b) => {
-      //     return b.comment - a.comment;
-      //   });
-      //   setPosts(newPosts);
-      //   setPostsToDisplay(result.data);
-      // }
-      // if (sortingCriteria === "oldest") {
-      //   setPosts(newPosts);
-      //   setPostsToDisplay(result.data);
-      // } else if (sortingCriteria === "latest") {
-      //   setPosts(newPosts.reverse());
-      //   setPostsToDisplay(result.data);
-      // } else if (sortingCriteria === "mostClick") {
-      //   newPosts = sortByLike(newPosts);
-      //   setPosts(newPosts);
-      //   setPostsToDisplay(result.data);
-      // }
     });
   };
 
   return (
-    <>
+    <div
+      style={{
+        paddingRight: "20px",
+        height: "100vh",
+        overflowY: "scroll",
+        paddingBottom: "102vh"
+      }}
+      className="scrollable"
+      onScroll={e => {
+        const bottom =
+          e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+        if (bottom) {
+          increaseSkip(limit + skip);
+        }
+      }}
+    >
       {postsToDisplay.map(value => (
         <div key={value._id}>
-          {/* passing detail to each post  */}
           <SubPostComp value={value} />
         </div>
       ))}
@@ -111,7 +115,13 @@ const AllPost = ({
           </button>
         </li>
       </ul>
-    </>
+    </div>
   );
+};
+const mapStateToProps = state => {
+  return {
+    categoriesToDisplay: state.categoryReducer.categories,
+    categoriesToDisplay: state.categoryReducer.categoriesToDisplay
+  };
 };
 export default connect(mapStateToProps, null)(AllPost);

@@ -4,9 +4,6 @@ import Moment from "react-moment";
 import LoadingScreen from "../../../../Screens/LoadingScreen";
 import { connect } from "react-redux";
 import { url } from "../../../../config/url";
-let matchStateToProps = state => {
-  return { currentUser: state.userReducer.userInfo };
-};
 const SinglePost = ({ currentUser, location, history }) => {
   let loadingPostDone = useState(false);
   const [postToDisplay, setPostToDisplay] = useState({
@@ -188,9 +185,6 @@ const SinglePost = ({ currentUser, location, history }) => {
                       </div>
                     </ul>
                   </form>
-                  {/* <div className="view_div">
-              <a href="#">View more</a>
-            </div> */}
                 </div>
               </>
             ) : (
@@ -201,5 +195,8 @@ const SinglePost = ({ currentUser, location, history }) => {
       </div>
     </>
   );
+};
+const matchStateToProps = state => {
+  return { currentUser: state.userReducer.userInfo };
 };
 export default connect(matchStateToProps, null)(SinglePost);

@@ -7,9 +7,6 @@ import UploadPostComp from "../../Form/UploadPostForm";
 import { useEffect } from "react";
 import Axios from "axios";
 import { url } from "../../../config/url";
-const mapStateToProps = state => {
-  return { categories: state.categoryReducer.categories };
-};
 const SideNavBar = ({ handleUpload, categories }) => {
   const [showUploadPanel, setShowUploadPanel] = useState(false);
   const [showAddCategoryPanel, setShowAddCategoryPanel] = useState(false);
@@ -23,7 +20,13 @@ const SideNavBar = ({ handleUpload, categories }) => {
   };
   useEffect(() => {
     Axios.get(url + "/post/getPost", {
-      params: { skip: 0, limit: 3 }
+      params: {
+        skip: 0,
+        limit: 3,
+        sort: "date",
+        order: "1",
+        category: "Fake_ID"
+      }
     }).then(result => {
       if (result.data) {
         setFeaturedPost(result.data);
@@ -95,5 +98,8 @@ const SideNavBar = ({ handleUpload, categories }) => {
       </div>
     </>
   );
+};
+const mapStateToProps = state => {
+  return { categories: state.categoryReducer.categories };
 };
 export default connect(mapStateToProps, null)(SideNavBar);

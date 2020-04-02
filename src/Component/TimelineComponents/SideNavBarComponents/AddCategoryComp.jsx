@@ -1,34 +1,13 @@
 import React, { useState } from "react";
 import Axios from "axios";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { url } from "../../../config/url";
-const mapStateToProps = state => {
-  return {
-    categories: state.categoryReducer.categories,
-    currentUser: state.userReducer.userInfo
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    CATEGORY_CHANGE: data =>
-      dispatch({
-        type: "CATEGORY_CHANGE",
-        categoriesToDisplay: data.categoriesToDisplay
-      }),
-    GET_CATEGORY: data => {
-      dispatch({
-        type: "GET_CATEGORY",
-        categories: data.categories
-      });
-    }
-  };
-};
-let AddCategoryComp = ({
+import { setCategories } from "../../../actions/categoryAction";
+const AddCategoryComp = ({
   currentUser,
   categories,
   setShowAddCategoryPanel,
-  GET_CATEGORY
+  setCategories
 }) => {
   const [categoryStatus, setCategoryStatus] = useState("Category");
   const [categoryColor, setcategoryColor] = useState("");
@@ -44,9 +23,7 @@ let AddCategoryComp = ({
       if (result.data) {
         let newCategories = [...categories];
         newCategories.push(result.data);
-        GET_CATEGORY({
-          categories: newCategories
-        });
+        setCategories(newCategories);
         setShowAddCategoryPanel(false);
       } else {
         setcategoryColor("#ffcccb");
@@ -71,9 +48,9 @@ let AddCategoryComp = ({
                 required="required"
                 onChange={handleChange}
                 type="text"
-                name="category"
+                name="categoryName"
                 placeholder="Enter Category Name"
-              />
+                />
             </li>
             <li>
               <input type="submit" />
@@ -86,7 +63,7 @@ let AddCategoryComp = ({
               onClick={() => {
                 setShowAddCategoryPanel(false);
               }}
-            >
+              >
               <input type="submit" value="Back" />
             </a>
           </li>
@@ -96,4 +73,17 @@ let AddCategoryComp = ({
   );
 };
 
+const mapStateToProps = state => {
+  return {
+    categories: state.categoryReducer.categories,
+    currentUser: state.userReducer.userInfo
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    setCategories: data => {
+      dispatch(setCategories(data));
+    }
+  };
+};
 export default connect(mapStateToProps, mapDispatchToProps)(AddCategoryComp);

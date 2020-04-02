@@ -1,31 +1,25 @@
 import React from "react";
 import { connect } from "react-redux";
 import { url } from "../../../config/url";
-const mapStateToProps = state => {
-  return { categories: state.categoryReducer.categories };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    CATEGORY_CHANGE: data =>
-      dispatch({
-        type: "CATEGORY_CHANGE",
-        categoriesToDisplay: data.categoriesToDisplay
-      }),
-    GET_CATEGORY: data => {
-      dispatch({
-        type: "GET_CATEGORY",
-        categories: data.categories
-      });
-    }
-  };
-};
-const ShowCategory = ({ CATEGORY_CHANGE, categories }) => {
+import { changeCategory } from "../../../actions/categoryAction";
+const ShowCategory = ({ changeCategory, categories }) => {
   const handleChange = e => {
     let category = e.target.parentNode.parentNode.outerHTML
-      .split("</span></div>")[0]
-      .split("</span><span>")[1];
-    CATEGORY_CHANGE({ categoriesToDisplay: category });
+    .split("</span></div>")[0]
+    .split("</span><span>")[1];
+    if (category !== "all" && category !== "All") {
+      for (let i of categories) {
+        if (i["categoryName"] === category) {
+          category = i;
+          break;
+        }
+      }
+    } else {
+      category = { categoryName: "ALL" };
+    }
+    changeCategory(category);
   };
+  
   return (
     <>
       <div className="rght_cate">
@@ -41,7 +35,7 @@ const ShowCategory = ({ CATEGORY_CHANGE, categories }) => {
                     alt="AllImage"
                     src="/post/all.png"
                     style={{ maxHeight: "40px" }}
-                  />
+                    />
                 </span>
                 <span>All</span>
               </div>
@@ -55,7 +49,7 @@ const ShowCategory = ({ CATEGORY_CHANGE, categories }) => {
                       src={url + "/post/" + value.image}
                       alt="up"
                       style={{ maxHeight: "40px", maxWidth: "40px" }}
-                    />
+                      />
                   </span>
                   <span>{value.categoryName}</span>
                 </div>
@@ -66,5 +60,13 @@ const ShowCategory = ({ CATEGORY_CHANGE, categories }) => {
       </div>
     </>
   );
+};
+const mapStateToProps = state => {
+  return { categories: state.categoryReducer.categories };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    changeCategory: data => dispatch(changeCategory(data))
+  };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ShowCategory);
