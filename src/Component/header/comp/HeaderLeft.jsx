@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-const HeaderLeft = ({ loggedIn }) => {
+const HeaderLeft = ({ isLoggedIn }) => {
   return (
     <div className="header_lft">
       <div className="logo">
@@ -11,7 +10,7 @@ const HeaderLeft = ({ loggedIn }) => {
       </div>
       <div className="navigatn">
         <ul>
-          {loggedIn ? (
+          {isLoggedIn ? (
             <>
               <li>
                 <a>Home</a>
@@ -34,7 +33,5 @@ const HeaderLeft = ({ loggedIn }) => {
     </div>
   );
 };
-const mapStateToProps = state => {
-  return { loggedIn: state.loginReducer.loggedIn };
-};
-export default connect(mapStateToProps, null)(HeaderLeft);
+
+export default HeaderLeft;

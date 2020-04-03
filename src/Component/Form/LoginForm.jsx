@@ -3,9 +3,9 @@ import Axios from "axios";
 import { Link, useLocation, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import WelcomePage from "./WelcomePage";
-import { setUserInfo, login } from "../../actions/userAction";
+import { setUserInfo } from "../../actions/userAction";
 import { url } from "../../config/url";
-const LoginComp = ({ setUserInfo, login, history }) => {
+const LoginComp = ({ setUserInfo, setIsLoggedIn }) => {
   const [background, setBackground] = useState("");
   const [emailStatus, setEmailStatus] = useState("Email-ID");
   const [rememberMe, setRememberMe] = useState("off");
@@ -39,7 +39,7 @@ const LoginComp = ({ setUserInfo, login, history }) => {
         let token = JSON.parse(localStorage.getItem("userToken"));
         Axios.post(url + "/user/verifyUserToken", token).then(result => {
           if (result.data.verify) {
-            login();
+            setIsLoggedIn(true);
             // alert("user Found");
             let email = result.data.email;
             let password = result.data.password;
@@ -60,10 +60,7 @@ const LoginComp = ({ setUserInfo, login, history }) => {
       }
     });
   };
-  let location = useLocation().pathname.split("/")[1];
-  if (location === "timeline") {
-    history.push("/");
-  }
+
   return (
     <div className="container">
       <div className="content">
@@ -132,13 +129,11 @@ const LoginComp = ({ setUserInfo, login, history }) => {
 };
 const mapStateToProps = state => {
   return {
-    loggedIn: state.loginReducer.loggedIn,
     userInfo: state.userReducer.userInfo
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    login: () => dispatch(login),
     setUserInfo: payload => dispatch(setUserInfo(payload))
   };
 };

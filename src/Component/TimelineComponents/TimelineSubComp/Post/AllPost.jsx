@@ -3,13 +3,13 @@ import Axios from "axios";
 import SubPostComp from "./SubPostComp";
 import { connect } from "react-redux";
 import { url } from "../../../../config/url";
-function usePrevious(value) {
+const usePrevious = value => {
   const ref = useRef();
   useEffect(() => {
     ref.current = value;
   });
   return ref.current;
-}
+};
 
 const AllPost = ({
   uploadFlag,
@@ -24,9 +24,11 @@ const AllPost = ({
   const [skip, increaseSkip] = useState(0);
   useEffect(() => {
     if (sortingCriteria !== preSortingCriteria) {
-      console.log(sortingCriteria, "changing criteria", preSortingCriteria);
-      if (skip !== 0) increaseSkip(0);
-      else updatePosts();
+      if (skip !== 0) {
+        increaseSkip(0);
+      } else {
+        updatePosts();
+      }
     } else if (uploadFlag) {
       handleUpload(false);
       alert("you just added new post");
@@ -45,6 +47,7 @@ const AllPost = ({
   const updatePosts = () => {
     let sort;
     let order;
+
     if (sortingCriteria === "mostComment") {
       sort = "comments";
       order = -1;
@@ -56,7 +59,7 @@ const AllPost = ({
       order = -1;
     } else if (sortingCriteria === "mostClick") {
       sort = "like";
-      order = 1;
+      order = -1;
     }
     let category;
     if (categoriesToDisplay.categoryName === "ALL") {
@@ -74,9 +77,13 @@ const AllPost = ({
       }
     }).then(async result => {
       if (result.data) {
-        if (skip !== 0) setPostsToDisplay([...postsToDisplay, ...result.data]);
-        else {
+        if (
+          preCategoriesToDisplay !== categoriesToDisplay ||
+          preSortingCriteria !== sortingCriteria
+        ) {
           setPostsToDisplay(result.data);
+        } else {
+          setPostsToDisplay([...postsToDisplay, ...result.data]);
         }
       }
     });

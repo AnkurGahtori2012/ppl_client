@@ -2,12 +2,13 @@ import React from "react";
 import HeaderLeft from "./comp/HeaderLeft";
 import HeaderRight from "./comp/HeaderRight";
 
-function Header(props) {
+const Header = ({ isLoggedIn, setIsLoggedIn }) => {
+  console.log("loggedin", isLoggedIn);
   return (
     <div className="header">
-      <HeaderLeft />
-      <HeaderRight />
+      <HeaderLeft isLoggedIn={isLoggedIn} />
+      <HeaderRight isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
     </div>
   );
-}
+};
 export default Header;

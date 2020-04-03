@@ -1,6 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
-import { logout } from "../../../actions/userAction";
 const HeaderRight = props => {
   return (
     <div className="header_rgt">
@@ -15,8 +13,8 @@ const HeaderRight = props => {
   );
 };
 
-function Status({ loggedIn, logout }) {
-  if (loggedIn) {
+const Status = ({ isLoggedIn, setIsLoggedIn }) => {
+  if (isLoggedIn) {
     return (
       <div className="pro_info pull-right">
         <div className="pro_icn">
@@ -32,7 +30,7 @@ function Status({ loggedIn, logout }) {
               href=""
               onClick={() => {
                 localStorage.removeItem("userToken");
-                logout();
+                setIsLoggedIn(false);
               }}
             >
               Logout
@@ -59,14 +57,6 @@ function Status({ loggedIn, logout }) {
     );
   }
   return <></>;
-}
+};
 
-const mapStateToProps = state => {
-  return { loggedIn: state.loginReducer.loggedIn };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    logout: () => dispatch(logout())
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderRight);
+export default HeaderRight;

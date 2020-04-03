@@ -6,7 +6,6 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import TimelineScreen from "./Screens/TimelineScreen";
 import VerifyComp from "./Component/Form/VerifyForm";
-import LoginComp from "./Component/Form/LoginForm";
 import RegisterComp from "./Component/Form/RegisterForm";
 import ForgetComp from "./Component/Form/ForgetForm";
 import NotFound from "./Screens/NotFoundScreen";
@@ -16,24 +15,25 @@ import Axios from "axios";
 import SinglePost from "./Component/TimelineComponents/TimelineSubComp/Post/SinglePost";
 import { setUserInfo } from "./actions/userAction";
 import { url } from "./config/url";
-import { login, logout } from "./actions/userAction";
-const App = ({ logout, login, loggedIn, setUserInfo }) => {
+import LoginForm from "./Component/Form/LoginForm";
+const App = ({ setUserInfo }) => {
   let [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     if (localStorage.getItem("userToken")) {
       let token = JSON.parse(localStorage.getItem("userToken"));
       Axios.post(url + "/user/verifyUserToken", token).then(result => {
         if (result.data.verify) {
           setUserInfo(result.data);
-          login();
+          setIsLoggedIn(true);
           setIsLoading(false);
         } else {
-          logout();
+          setIsLoggedIn(false);
           setIsLoading(false);
         }
       });
     } else {
-      logout();
+      setIsLoggedIn(false);
       setIsLoading(false);
     }
   }, []);
@@ -43,9 +43,9 @@ const App = ({ logout, login, loggedIn, setUserInfo }) => {
         <LoadingScreen />
       ) : (
         <>
-          <Header />
+          <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
 
-          {loggedIn ? (
+          {isLoggedIn ? (
             <Switch>
               <Redirect from="/(|signup|forget)/" to="/timeline" />
               <Route exact path="/timeline" component={TimelineScreen} />
@@ -57,7 +57,11 @@ const App = ({ logout, login, loggedIn, setUserInfo }) => {
               <Redirect from="/timeline" to="/" />
               <Route path="/verify/*" component={VerifyComp} />
               <Route path="/reset/*" component={ResetComp} />
-              <Route exact path="/" component={LoginComp} />
+              <Route
+                exact
+                path="/"
+                render={() => <LoginForm setIsLoggedIn={setIsLoggedIn} />}
+              />
               <Route path="/signup" component={RegisterComp} />
               <Route path="/forget" component={ForgetComp} />
               <Route path="*" component={NotFound} />
@@ -71,16 +75,8 @@ const App = ({ logout, login, loggedIn, setUserInfo }) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    loggedIn: state.loginReducer.loggedIn
-  };
-};
-
 const mapDispatchToProps = dispatch => ({
-  setUserInfo: payload => dispatch(setUserInfo(payload)),
-  login: () => dispatch(login()),
-  logout: () => dispatch(logout())
+  setUserInfo: payload => dispatch(setUserInfo(payload))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(null, mapDispatchToProps)(App);
