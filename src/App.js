@@ -14,9 +14,11 @@ import ResetComp from "./Component/Form/ResetForm";
 import Axios from "axios";
 import SinglePost from "./Component/TimelineComponents/TimelineSubComp/Post/SinglePost";
 import { setUserInfo } from "./actions/userAction";
+import { setCategories } from "./actions/categoryAction";
+
 import { url } from "./config/url";
 import LoginForm from "./Component/Form/LoginForm";
-const App = ({ setUserInfo }) => {
+const App = ({ setUserInfo, setCategories }) => {
   let [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
@@ -25,6 +27,7 @@ const App = ({ setUserInfo }) => {
       Axios.post(url + "/user/verifyUserToken", token).then(result => {
         if (result.data.verify) {
           setUserInfo(result.data);
+          setCategories();
           setIsLoggedIn(true);
           setIsLoading(false);
         } else {
@@ -76,7 +79,10 @@ const App = ({ setUserInfo }) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setUserInfo: payload => dispatch(setUserInfo(payload))
+  setUserInfo: payload => dispatch(setUserInfo(payload)),
+  setCategories: () => {
+    dispatch(setCategories());
+  }
 });
 
 export default connect(null, mapDispatchToProps)(App);

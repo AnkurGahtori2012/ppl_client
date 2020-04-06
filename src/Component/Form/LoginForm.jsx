@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { Link, useLocation, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import WelcomePage from "./WelcomePage";
 import { setUserInfo } from "../../actions/userAction";
 import { url } from "../../config/url";
-const LoginComp = ({ setUserInfo, setIsLoggedIn }) => {
+import { setCategories } from "../../actions/categoryAction";
+const LoginComp = ({ setUserInfo, setIsLoggedIn, setCategories }) => {
   const [background, setBackground] = useState("");
   const [emailStatus, setEmailStatus] = useState("Email-ID");
   const [rememberMe, setRememberMe] = useState("off");
@@ -39,6 +40,7 @@ const LoginComp = ({ setUserInfo, setIsLoggedIn }) => {
         let token = JSON.parse(localStorage.getItem("userToken"));
         Axios.post(url + "/user/verifyUserToken", token).then(result => {
           if (result.data.verify) {
+            setCategories();
             setIsLoggedIn(true);
             // alert("user Found");
             let email = result.data.email;
@@ -134,7 +136,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    setUserInfo: payload => dispatch(setUserInfo(payload))
+    setUserInfo: payload => dispatch(setUserInfo(payload)),
+    setCategories: () => dispatch(setCategories())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginComp);

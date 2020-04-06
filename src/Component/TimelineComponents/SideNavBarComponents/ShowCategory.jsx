@@ -5,8 +5,8 @@ import { changeCategory } from "../../../actions/categoryAction";
 const ShowCategory = ({ changeCategory, categories }) => {
   const handleChange = e => {
     let category = e.target.parentNode.parentNode.outerHTML
-    .split("</span></div>")[0]
-    .split("</span><span>")[1];
+      .split("</span></div>")[0]
+      .split("</span><span>")[1];
     if (category !== "all" && category !== "All") {
       for (let i of categories) {
         if (i["categoryName"] === category) {
@@ -19,7 +19,7 @@ const ShowCategory = ({ changeCategory, categories }) => {
     }
     changeCategory(category);
   };
-  
+
   return (
     <>
       <div className="rght_cate">
@@ -35,7 +35,7 @@ const ShowCategory = ({ changeCategory, categories }) => {
                     alt="AllImage"
                     src="/post/all.png"
                     style={{ maxHeight: "40px" }}
-                    />
+                  />
                 </span>
                 <span>All</span>
               </div>
@@ -49,7 +49,7 @@ const ShowCategory = ({ changeCategory, categories }) => {
                       src={url + "/post/" + value.image}
                       alt="up"
                       style={{ maxHeight: "40px", maxWidth: "40px" }}
-                      />
+                    />
                   </span>
                   <span>{value.categoryName}</span>
                 </div>

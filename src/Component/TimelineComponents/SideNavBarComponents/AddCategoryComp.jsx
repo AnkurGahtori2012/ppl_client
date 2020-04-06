@@ -23,7 +23,7 @@ const AddCategoryComp = ({
       if (result.data) {
         let newCategories = [...categories];
         newCategories.push(result.data);
-        setCategories(newCategories);
+        setCategories();
         setShowAddCategoryPanel(false);
       } else {
         setcategoryColor("#ffcccb");
@@ -50,7 +50,7 @@ const AddCategoryComp = ({
                 type="text"
                 name="categoryName"
                 placeholder="Enter Category Name"
-                />
+              />
             </li>
             <li>
               <input type="submit" />
@@ -63,7 +63,7 @@ const AddCategoryComp = ({
               onClick={() => {
                 setShowAddCategoryPanel(false);
               }}
-              >
+            >
               <input type="submit" value="Back" />
             </a>
           </li>
@@ -81,8 +81,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    setCategories: data => {
-      dispatch(setCategories(data));
+    setCategories: () => {
+      dispatch(setCategories());
     }
   };
 };
